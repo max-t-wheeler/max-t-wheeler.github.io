@@ -91,3 +91,46 @@ function colorNodes(n) {
   return color;
 
 }
+
+/////////////////////////////WebGL Helper Functions//////////////////////////////////////
+
+function phi(t, n) {
+  
+  var p = 2*Math.PI*t/n;
+
+  return p;
+
+}
+
+function polygon(center, radius, numVertices, theta, color) {
+
+  vertices = new Float32Array(numVertices*3);
+
+  for (var i = 0; i < numVertices; ++i) {
+    vertices[3*i + 0] = radius*Math.sin(phi(i, numVertices) + theta) + center[0];
+    vertices[3*i + 1] = radius*Math.cos(phi(i, numVertices) + theta) + center[1];
+    vertices[3*i + 2] = 0;
+  }
+
+  this.vertices = vertices;
+  this.center = center;
+  this.radius = radius;
+  this.numVertices = numVertices;
+  this.theta = theta;
+
+  geometry = new THREE.BufferGeometry();
+
+  geometry.addAttribute(
+    'position',
+    new THREE.BufferAttribute(vertices, 3)
+  );
+
+  material = new THREE.LineBasicMaterial( 
+    {
+      color: color
+    } 
+  );
+  
+  this.line = new THREE.LineLoop(geometry, material);
+
+}

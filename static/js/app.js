@@ -63,6 +63,14 @@ var app = new Vue({
       },
 
       {
+        text: 'shapes / pearl',
+        entry: 'pearl',
+        dynamic: true,
+        address: '/opengl_webgl_conversion#shapes_pearl',
+        active: false
+      },
+
+      {
         text: 'art / collide0scope',
         entry: 'collide',
         dynamic: true,
@@ -83,6 +91,14 @@ var app = new Vue({
         entry: 'concentric polygons',
         dynamic: false,
         address: '/opengl_webgl_conversion#art_concentric_polygons',
+        active: false
+      },
+
+      {
+        text: 'art / concentric polygons 2',
+        entry: 'concentric polygons 2',
+        dynamic: false,
+        address: '/opengl_webgl_conversion#art_concentric_polygons_2',
         active: false
       },
 

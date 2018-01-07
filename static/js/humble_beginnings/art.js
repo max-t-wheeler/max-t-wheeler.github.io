@@ -44,6 +44,20 @@ function generateConcentricPolygons(numPolygons, numFaces) {
 
 }
 
+function generateConcentricPolygons2(numPolygons, radius) {
+
+  var x = [0, 0];
+  var t = 0;
+  var col = 0xf00a00;
+
+  for (var i = 1; i <= numPolygons; ++i) {
+    var r = radius*i/numPolygons;
+    poly = new polygon(x, r, i+2, t, col);
+    scene.add(poly.line);
+  }
+
+}
+
 function generatePinwheel(numPolygons, numFaces) {
 
   for (var i = 2*numPolygons; i >= 1; i--) {
@@ -55,47 +69,6 @@ function generatePinwheel(numPolygons, numFaces) {
     scene.add(mesh);
 
   }
-
-}
-
-function phi(t, n) {
-  
-  var p = 2*Math.PI*t/n;
-
-  return p;
-
-}
-
-function polygon(center, radius, numVertices, theta, color) {
-
-  vertices = new Float32Array(numVertices*3);
-
-  for (var i = 0; i < numVertices; ++i) {
-    vertices[3*i + 0] = radius*Math.sin(phi(i, numVertices) + theta) + center[0];
-    vertices[3*i + 1] = radius*Math.cos(phi(i, numVertices) + theta) + center[1];
-    vertices[3*i + 2] = 0;
-  }
-
-  this.vertices = vertices;
-  this.center = center;
-  this.radius = radius;
-  this.numVertices = numVertices;
-  this.theta = theta;
-
-  geometry = new THREE.BufferGeometry();
-
-  geometry.addAttribute(
-    'position',
-    new THREE.BufferAttribute(vertices, 3)
-  );
-
-  material = new THREE.LineBasicMaterial( 
-    {
-      color: color
-    } 
-  );
-  
-  this.line = new THREE.LineLoop(geometry, material);
 
 }
 
@@ -133,6 +106,19 @@ function updateConcentricPolygons(numPolygons, t) {
 
   for (var i = 0; i < numPolygons; ++i) {
     scene.children[i].rotation.z = 2*(numPolygons-i)*Math.sin(t/4);
+  }
+
+}
+
+function updateConcentricPolygons2(numPolygons, t) {
+
+  for (var i = 0; i < numPolygons; ++i) {
+    if (i % 2 === 0) {
+      scene.children[i].rotation.z = Math.sin(i)*t/2;
+    }
+    else {
+      scene.children[i].rotation.z = Math.sin(-i)*t/2;
+    }
   }
 
 }

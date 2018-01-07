@@ -132,6 +132,9 @@
             case "clam":
               generateClam(200, 1);
               break;
+            case "pearl":
+              generatePearl(200, 1);
+              break;
             case "collide":
               generateCollide0scope(20);
               break;
@@ -140,6 +143,10 @@
               break;
             case "concentric polygons":
               generateConcentricPolygons(10, 5);
+              controls = null;
+              break;
+            case "concentric polygons 2":
+              generateConcentricPolygons2(20, 5);
               controls = null;
               break;
             case "pinwheel":
@@ -169,6 +176,9 @@
                 updateSineWave(1500, dt);
               case "concentric polygons":
                 updateConcentricPolygons(10, dt);
+                break;
+              case "concentric polygons 2":
+                updateConcentricPolygons2(20, dt);
                 break;
               case "pinwheel":
                 updatePinwheel(10, dt);
