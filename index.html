@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html> 
+
+  <head>
+
+    <meta charset="utf-8">
+
+    <title>OpenGL2WebGL</title>
+
+    <style>
+
+       body { 
+          margin: 0; 
+       }
+
+       canvas {
+          float:right;
+
+       }
+
+       h2 {
+          text-align: center;
+       }
+
+       li {
+          color: blue;
+          text-decoration: underline; 
+          cursor: pointer;
+       }
+
+       .sidebar {
+          text-align: left;
+          width: window.innerWidth/4;
+          height: window.innerHeight;
+          float: left;
+       }
+
+       .active {
+          color: green;
+       }
+
+    </style>
+
+    <!-- Vue Libraries -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!-- WebGL Libraries -->
+    <script type='text/javascript' src='static/js/threeJS/build/three.min.js'></script>
+    <script type='text/javascript' src='static/js/threeJS/controls/OrbitControls.js'></script>
+    <script type='text/javascript' src='static/js/utils.js'></script>
+    <script type='text/javascript' src='static/js/humble_beginnings/shapes.js'></script>
+    <script type='text/javascript' src='static/js/humble_beginnings/physics.js'></script>
+    <script type='text/javascript' src='static/js/humble_beginnings/art.js'></script>
+
+  </head>
+
+  <body>
+
+    <div id="app">
+
+      <div id="navpane" class="sidebar">
+
+        <h2>Animations</h2>
+
+        <ul id='navpane-list' style='list-style-type:circle'>
+
+          <navpane-item 
+            v-for='item in animations'
+            v-bind:animation="item" 
+            v-bind:class='{navpaneItem: true, active: item.active}'
+            >[[item.text]]
+
+          </navpane-item>
+ 
+        </ul>
+
+      </div>
+
+      <div id='animation-display' class='display' v-show="display">
+        <canvas id='animation-canvas'></canvas>
+      </div>
+
+      <script>
+
+        var canvas;        
+        var camera, renderer, scene;
+        var geometry, material, mesh;
+
+        var controls;
+
+        var canvasWidth = 3*window.innerWidth/4;
+        var canvasHeight = window.innerHeight;
+
+        var dt = 0;
+        var id = null;
+
+        function init(animationName, dynamic) {
+
+          if (id !== null) {
+            dt = 0;
+            controls = null;
+            cancelAnimationFrame(id);
+          }
+
+          scene = new THREE.Scene();
+          
+          setCamera(canvasWidth, canvasHeight, 3);
+
+          setRenderer("animation-canvas", 0x000000, canvasWidth, canvasHeight);
+
+          window.addEventListener('resize', onWindowResize);
+
+          if (dynamic) {
+            withControls();
+          }
+
+          switch(animationName) {
+
+            case "triangle":
+              generateTriangle();
+              break;
+            case "rectangle":
+              generateRectangle();
+              break;
+            case "cube":
+              generateCube();
+              break;
+            case "circle":
+              generateCircle(1, 5);
+              break;
+            case "clam":
+              generateClam(200, 1);
+              break;
+            case "collide":
+              generateCollide0scope(20);
+              break;
+            case "sine wave":
+              generateSineWave(1500);
+              break;
+            case "concentric polygons":
+              generateConcentricPolygons(10, 5);
+              controls = null;
+              break;
+            case "pinwheel":
+              generatePinwheel(10, 4);
+              break;
+            case "blanket":
+              generateBlanket(10, 4);
+              break;
+            case "polystarter":
+              generatePolygon();
+              break;
+            default:
+              alert("Please enter a valid animation");
+              return;
+              break;
+
+          }
+
+          function update(animation) {
+
+            switch(animation) {
+
+              case "collide":
+                updateCollide0scope(dt);
+                break;
+              case "sine wave":
+                updateSineWave(1500, dt);
+              case "concentric polygons":
+                updateConcentricPolygons(10, dt);
+                break;
+              case "pinwheel":
+                updatePinwheel(10, dt);
+                break;
+              case "polystarter":
+                updatePolygon(1, dt);
+                break;
+              default:
+                break;
+
+            }
+
+            dt += 1e-2;
+
+            if (dt > 2*Math.PI*1e6) {
+              dt -= 2*Math.PI*1e6;
+            }
+
+          };
+
+          function render() {
+            renderer.render(scene, camera);
+          };
+
+          function mainLoop() {
+            
+            id = requestAnimationFrame(mainLoop);
+
+            update(animationName);
+            render();
+          
+          };
+
+          mainLoop();
+
+        };
+
+      </script>
+
+    </div>
+
+    <script type='text/javascript' src='static/js/app.js'></script>
+
+  </body>
+
+</html>
