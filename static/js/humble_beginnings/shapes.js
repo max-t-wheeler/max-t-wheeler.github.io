@@ -250,3 +250,55 @@ function generatePearl(numRidges, radius) {
   scene.add(pearl);
 
 }
+
+function generatePolygon() {
+
+  var x = [0, 0];
+  var r = 0.5;
+  var n = 6;
+  var t = 0;
+  var col = 0xf00a00;
+
+
+  var poly = new polygon(x, r, n, t, col);
+
+  scene.add(poly.line);
+
+}
+
+function generateSacredCircles(numCircles, radius, color) {
+
+  var center = [0, 0];
+
+  for (var i = 0; i < numCircles; ++i) {
+
+    var x = center;
+
+    x[0] = radius*Math.cos(phi(i, numCircles));
+    x[1] = radius*Math.sin(phi(i, numCircles));
+
+    poly = new polygon(x, radius, 100, 0, color);
+
+    scene.add(poly.line);
+
+  }
+
+}
+
+function generateOffsetStar(numVertices, radius, offset, color) {
+
+  var x = [0, 0];
+
+  var star = new offsetStar(numVertices, x, radius, 0, offset, color);
+  scene.add(star.line);
+
+
+}
+
+function updatePolygon(t) {
+
+  for (var i = 0; i < scene.children.length; ++i) {
+    scene.children[i].rotation.z += t;
+  }
+
+}

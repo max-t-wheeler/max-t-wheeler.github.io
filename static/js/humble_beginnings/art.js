@@ -14,6 +14,20 @@ function generateCollide0scope(numCircles) {
 
 }
 
+function generateGyr0scope(numCircles) {
+
+  for (var i = 0; i < numCircles; ++i) {
+    
+    geometry = new THREE.CircleBufferGeometry(1+(i/(10*numCircles)), 10);
+    material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: true});
+    mesh = new THREE.Mesh(geometry, material);
+
+    scene.add(mesh);
+
+  }
+
+}
+
 function generateBlanket(numPolygons, numFaces) {
 
   for (var i = 2*numPolygons; i >= 1; i--) {
@@ -33,7 +47,7 @@ function generateBlanket(numPolygons, numFaces) {
 function generateConcentricPolygons(numPolygons, numFaces) {
 
   for (var i = numPolygons; i >= 1; i--) {
-    
+  
     geometry = new THREE.CircleBufferGeometry((10/(numPolygons-i+1)), numFaces);
     material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: false});
     mesh = new THREE.Mesh(geometry, material);
@@ -72,24 +86,59 @@ function generatePinwheel(numPolygons, numFaces) {
 
 }
 
-function generatePolygon() {
+function generateBounceRipple(numPolygons, radius) {
 
   var x = [0, 0];
-  var r = 0.5;
-  var n = 6;
-  var t = 0;
   var col = 0xf00a00;
 
+  for (var i = 1; i <= numPolygons; ++i) {
+    var r = radius*i/10;
+    poly = new polygon(x, r, 100, 0, col);
+    scene.add(poly.line);
+  }
 
-  poly = new polygon(x, r, n, t, col);
+}
 
-  scene.add(poly.line);
+function generateSloshRipple(numPolygons, radius) {
+
+  var x = [0, 0];
+
+  for (var i = 1; i <= numPolygons; ++i) {
+    var r = radius*i/10;
+    poly = new polygon(x, r, 100, 0, colorNodes(i-1));
+    scene.add(poly.line);
+  }
+
+}
+
+function generateWrigglingDonut(numNodes, numPolygons, radius) {
+
+  var x = [0, 0];
+
+  for (i = 1; i < numNodes; ++i) {
+
+      for (j = 0; j < numNodes; ++j) {
+
+        x[0] = 0.2*Math.cos(phi(i, numNodes)) + 0.2*Math.cos(phi(j, numNodes))*Math.sin(phi(i, numPolygons));
+        x[1] = 0.2*Math.sin(phi(i, numNodes)) + 0.2*Math.sin(phi(j, numNodes))*Math.cos(phi(i, numPolygons));
+
+
+
+        poly = new polygon(x, radius, numNodes, 0, colorNodes(1));
+        scene.add(poly.line);
+
+    }
+
+  }
 
 }
 
 function updateCollide0scope(t) {
 
-  for (var i = 0; i < 20; ++i) {
+  for (var i = 0; i < scene.children.length; ++i) {
+
+    var r = 1+(i/5);
+
     if (i%2 == 0) {
       scene.children[i].position.z += (0.005 + (i/1000))*Math.cos(t);
       scene.children[i].rotation.z -= 0.01*Math.cos(t);
@@ -102,17 +151,35 @@ function updateCollide0scope(t) {
 
 }
 
-function updateConcentricPolygons(numPolygons, t) {
+function updateGyr0scope(t) {
 
-  for (var i = 0; i < numPolygons; ++i) {
-    scene.children[i].rotation.z = 2*(numPolygons-i)*Math.sin(t/4);
+  for (var i = 0; i < scene.children.length; ++i) {
+
+    var r = 1;
+
+    if (i%2 == 0) {
+      scene.children[i].scale.set(1, r*Math.cos(t/2), 2);
+      scene.children[i].rotation.z -= 0.01*Math.cos(t);
+    }
+    else {
+      scene.children[i].scale.set(1, r*Math.sin(t/2), 1);
+      scene.children[i].rotation.z += 0.01*Math.sin(t);
+    }
   }
 
 }
 
-function updateConcentricPolygons2(numPolygons, t) {
+function updateConcentricPolygons(t) {
 
-  for (var i = 0; i < numPolygons; ++i) {
+  for (var i = 0; i < scene.children.length; ++i) {
+    scene.children[i].rotation.z = 2*(scene.children.length-i)*Math.sin(t/4);
+  }
+
+}
+
+function updateConcentricPolygons2(t) {
+
+  for (var i = 0; i < scene.children.length; ++i) {
     if (i % 2 === 0) {
       scene.children[i].rotation.z = Math.sin(i)*t/2;
     }
@@ -125,16 +192,38 @@ function updateConcentricPolygons2(numPolygons, t) {
 
 function updatePinwheel(numPolygons, t) {
 
-  for (var i = 0; i < 2*numPolygons; ++i) {
-    scene.children[i].rotation.z = 2*t*(numPolygons-i)*Math.PI*i/160;
+  for (var i = 0; i < scene.children.length; ++i) {
+    scene.children[i].rotation.z = 2*t*((scene.children.length/2)-i)*Math.PI*i/160;
   }
 
 }
 
-function updatePolygon(numPolygons, t) {
+function updateBounceRipple(t) {
 
-  for (var i = 0; i < numPolygons; ++i) {
-    scene.children[i].rotation.z += t;
+  for (var i = 0; i < scene.children.length; ++i) {
+
+    scene.children[i].scale.set(Math.cos(t)*Math.sin(phi(i, 100) + 2*t), Math.cos(t)*Math.sin(phi(i, 100) + 2*t), 1);
+
+  }
+
+}
+
+function updateSloshRipple(t) {
+
+  for (var i = 0; i < scene.children.length; ++i) {
+
+    scene.children[i].scale.set(Math.cos(phi(i, 100) + t/100), Math.cos(phi(i, 100) + t/100), 1);
+
+  }
+
+}
+
+function updateWrigglingDonut(t) {
+
+  for (var i = 0; i < scene.children.length; ++i) {
+
+    scene.children[i].rotation.z -= 10*t;
+
   }
 
 }
