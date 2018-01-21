@@ -1,42 +1,5 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three-orbitcontrols-ts';
 
-////////////////////////////////Event Listeners//////////////////////////////
-
-export function onWindowResize(canvasWidth, canvasHeight, renderer, camera) {
-
-  canvasWidth = 3*window.innerWidth/4;
-  canvasHeight = window.innerHeight;
-
-  renderer.setSize(canvasWidth, canvasHeight);
-  camera.aspect = canvasWidth/canvasHeight;
-  camera.updateProjectionMatrix();
-
-};
-
-export function withControls(camera, renderer) {
-  return new OrbitControls(camera, renderer.domElement);
-}
-
-///////////////////////////////Initializers//////////////////////////////////
-
-export function setRenderer(id, backgroundColor, width, height) {
-
-  const renderer = new THREE.WebGLRenderer({canvas: document.getElementById(id), antialias: true});
-  renderer.setClearColor(backgroundColor);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(width, height);
-
-  return renderer;
-}
-
-export function setCamera(width, height, offset) {
-
-  const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
-  camera.position.z = offset;
-
-  return camera;
-}
 
 /////////////////////////////Styling//////////////////////////////////////
 
