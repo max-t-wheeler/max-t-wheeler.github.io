@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three-orbitcontrols-ts';
 
+import { createAnimation } from './animations/index';
 import { colorNode } from './utils';
 
 import {
@@ -9,7 +10,6 @@ import {
   generateBlanket,
   generateConcentricPolygons,
   generateConcentricPolygons2,
-  generatePinwheel,
   generateWrigglingDonut,
   generateBounceRipple,
   generateSloshRipple,
@@ -17,7 +17,6 @@ import {
   updateGyr0scope,
   updateConcentricPolygons,
   updateConcentricPolygons2,
-  updatePinwheel,
   updateBounceRipple,
   updateSloshRipple,
   updateWrigglingDonut
@@ -40,7 +39,7 @@ import {
 
 export default class CanvasManager {
   constructor(canvas, animation) {
-    this.animation = animation;
+
     this.canvas = canvas;
 
     // reset animation
@@ -50,8 +49,11 @@ export default class CanvasManager {
       cancelAnimationFrame(this.animationId);
     }
 
-    //initalize canvas//
     this.scene = new THREE.Scene();
+
+    this.animation = createAnimation(animation.name, this.scene) || animation;  
+    
+
     this.setCamera(3);
     this.setRenderer(0x000000);
     this.checkCanvasSize();
@@ -64,7 +66,12 @@ export default class CanvasManager {
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     }
 
-    this.changeAnimation();
+    if (this.animation.draw) {
+      this.animation.draw();
+    } else {
+      this.draw();  
+    }
+    
     this.animationId = requestAnimationFrame(this.tick);
   }
 
@@ -91,16 +98,20 @@ export default class CanvasManager {
         this.dt -= 2 * Math.PI * 1e6;
       }
       
+      this.animationId = requestAnimationFrame(this.tick);
+
+      
     }
 
-    this.animationId = requestAnimationFrame(this.tick);
-
     this.renderer.render(this.scene, this.camera);
-    this.update();
+    if (this.animation.update) return this.animation.update(this.dt);
 
+    this.update();  
   }
 
+  // Old update for animations not using animation class
   update() {
+    if (!this.animation.dynamic) return;
 
     switch(this.animation.name) {
 
@@ -117,9 +128,6 @@ export default class CanvasManager {
         break;
       case "concentric polygons 2":
         updateConcentricPolygons2(this.scene, this.dt);
-        break;
-      case "pinwheel":
-        updatePinwheel(this.scene, 10, this.dt);
         break;
       case "polystarter":
         updatePolygon(this.scene, 1);
@@ -140,7 +148,8 @@ export default class CanvasManager {
 
   }
 
-  changeAnimation() {
+  // Old draw for animations not using animation class
+  draw() {
     switch(this.animation.name) {
 
       case "triangle":
@@ -184,9 +193,6 @@ export default class CanvasManager {
         break;
       case "concentric polygons 2":
         generateConcentricPolygons2(this.scene, 20, 5);
-        break;
-      case "pinwheel":
-        generatePinwheel(this.scene, 10, 4);
         break;
       case "blanket":
         generateBlanket(this.scene, 10, 4);
