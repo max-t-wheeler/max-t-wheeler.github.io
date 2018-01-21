@@ -1,8 +1,10 @@
+import * as THREE from 'three';
+
 var geometry, material, mesh;
 
 var vertices;
 
-function generateSineWave(numPoints) {
+export function generateSineWave(scene, numPoints) {
 
   var node_x = [];
   var node_y = [];
@@ -40,7 +42,7 @@ function generateSineWave(numPoints) {
     }
   );
 
-  line = new THREE.Line(geometry, material);
+  let line = new THREE.Line(geometry, material);
 
   scene.add(line);
 

@@ -1,8 +1,14 @@
-var geometry, material, mesh;
+import * as THREE from 'three';
 
-function generateTriangle() {
+import { 
+  phi,
+  offsetStar,
+  polygon
+} from '../utils';
 
-  geometry = new THREE.BufferGeometry();
+export function generateTriangle(scene) {
+
+  var geometry = new THREE.BufferGeometry();
 
   var vertices = new Float32Array([
     -0.5, -0.5, 0.0,
@@ -26,21 +32,21 @@ function generateTriangle() {
     new THREE.BufferAttribute(colors, 3)
   );
 
-  material = new THREE.LineBasicMaterial(
+  var material = new THREE.LineBasicMaterial(
     {
       vertexColors: THREE.VertexColors
     }
   );
 
-  mesh = new THREE.Mesh(geometry, material);
+  var mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateRectangle() {
+export function generateRectangle(scene) {
 
-  geometry = new THREE.BufferGeometry();
+  var geometry = new THREE.BufferGeometry();
 
   var vertices = new Float32Array([
     -0.5, -0.5, 0.0,
@@ -70,40 +76,40 @@ function generateRectangle() {
     new THREE.BufferAttribute(colors, 3)
   );
 
-  material = new THREE.MeshBasicMaterial(
+  var material = new THREE.MeshBasicMaterial(
     {
       vertexColors: THREE.VertexColors, 
       wireframe: false
     }
   );
 
-  mesh = new THREE.Mesh(geometry, material);
+  var mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateCube() {
+export function generateCube(scene) {
   
-  geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-  material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: false});
-  mesh = new THREE.Mesh(geometry, material);
+  var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
+  var material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: false});
+  var mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateCircle(radius, numSpokes) {
+export function generateCircle(scene, radius, numSpokes,) {
   
-  geometry = new THREE.CircleBufferGeometry(radius, numSpokes);
-  material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: true});
-  mesh = new THREE.Mesh(geometry, material);
+  var geometry = new THREE.CircleBufferGeometry(radius, numSpokes);
+  var material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: true});
+  var mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateClam(numRidges, radius) {
+export function generateClam(scene, numRidges, radius) {
 
   var phi = [];
 
@@ -125,7 +131,7 @@ function generateClam(numRidges, radius) {
     }
   }
 
-  geometry = new THREE.BufferGeometry();
+  var geometry = new THREE.BufferGeometry();
 
   geometry.addAttribute(
     'position', 
@@ -138,9 +144,11 @@ function generateClam(numRidges, radius) {
     }
   );
 
-  line = new THREE.Line(geometry, material);
+  let line = new THREE.Line(geometry, material);
 
   scene.add(line);
+
+  var geometry, material;
 
   for (var i = 0; i < numRidges; ++i) {
     var endpoints = new Float32Array(6);
@@ -151,7 +159,7 @@ function generateClam(numRidges, radius) {
     endpoints[4] = vertices[(3*i) + 1];
     endpoints[5] = vertices[(3*i) + 2];
 
-    var geometry = new THREE.BufferGeometry();
+    geometry = new THREE.BufferGeometry();
 
     geometry.addAttribute(
       'position',
@@ -171,7 +179,7 @@ function generateClam(numRidges, radius) {
 
 }
 
-function generatePearl(numRidges, radius) {
+export function generatePearl(scene, numRidges, radius) {
 
   var phi = [];
 
@@ -193,20 +201,20 @@ function generatePearl(numRidges, radius) {
     }
   }
 
-  geometry = new THREE.BufferGeometry();
+  var geometry = new THREE.BufferGeometry();
 
   geometry.addAttribute(
     'position', 
     new THREE.BufferAttribute(vertices, 3)
   );
 
-  material = new THREE.LineBasicMaterial(
+  var material = new THREE.LineBasicMaterial(
     {
       color: 0x00ffff
     }
   );
 
-  line = new THREE.Line(geometry, material);
+  let line = new THREE.Line(geometry, material);
 
   scene.add(line);
 
@@ -219,7 +227,7 @@ function generatePearl(numRidges, radius) {
     endpoints[4] = vertices[(3*i) + 1];
     endpoints[5] = vertices[(3*i) + 2];
 
-    var geometry = new THREE.BufferGeometry();
+    geometry = new THREE.BufferGeometry();
 
     geometry.addAttribute(
       'position',
@@ -251,7 +259,7 @@ function generatePearl(numRidges, radius) {
 
 }
 
-function generatePolygon() {
+export function generatePolygon(scene) {
 
   var x = [0, 0];
   var r = 0.5;
@@ -266,10 +274,11 @@ function generatePolygon() {
 
 }
 
-function generateSacredCircles(numCircles, radius, color) {
+export function generateSacredCircles(scene, numCircles, radius, color) {
 
   var center = [0, 0];
-
+  let poly;
+  
   for (var i = 0; i < numCircles; ++i) {
 
     var x = center;
@@ -285,7 +294,7 @@ function generateSacredCircles(numCircles, radius, color) {
 
 }
 
-function generateOffsetStar(numVertices, radius, offset, color) {
+export function generateOffsetStar(scene, numVertices, radius, offset, color) {
 
   var x = [0, 0];
 
@@ -295,7 +304,7 @@ function generateOffsetStar(numVertices, radius, offset, color) {
 
 }
 
-function updatePolygon(t) {
+export function updatePolygon(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
     scene.children[i].rotation.z += t;

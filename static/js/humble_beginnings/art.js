@@ -1,6 +1,10 @@
+import * as THREE from 'three';
+
+import { colorNodes, polygon, phi } from '../utils';
+
 var geometry, material, mesh;
 
-function generateCollide0scope(numCircles) {
+export function generateCollide0scope(scene, numCircles) {
 
   for (var i = 0; i < numCircles; ++i) {
     
@@ -14,7 +18,7 @@ function generateCollide0scope(numCircles) {
 
 }
 
-function generateGyr0scope(numCircles) {
+export function generateGyr0scope(scene, numCircles) {
 
   for (var i = 0; i < numCircles; ++i) {
     
@@ -28,7 +32,7 @@ function generateGyr0scope(numCircles) {
 
 }
 
-function generateBlanket(numPolygons, numFaces) {
+export function generateBlanket(scene, numPolygons, numFaces) {
 
   for (var i = 2*numPolygons; i >= 1; i--) {
     
@@ -44,7 +48,7 @@ function generateBlanket(numPolygons, numFaces) {
 
 }
 
-function generateConcentricPolygons(numPolygons, numFaces) {
+export function generateConcentricPolygons(scene, numPolygons, numFaces) {
 
   for (var i = numPolygons; i >= 1; i--) {
   
@@ -58,11 +62,12 @@ function generateConcentricPolygons(numPolygons, numFaces) {
 
 }
 
-function generateConcentricPolygons2(numPolygons, radius) {
+export function generateConcentricPolygons2(scene, numPolygons, radius) {
 
   var x = [0, 0];
   var t = 0;
   var col = 0xf00a00;
+  let poly;
 
   for (var i = 1; i <= numPolygons; ++i) {
     var r = radius*i/numPolygons;
@@ -72,7 +77,7 @@ function generateConcentricPolygons2(numPolygons, radius) {
 
 }
 
-function generatePinwheel(numPolygons, numFaces) {
+export function generatePinwheel(scene, numPolygons, numFaces) {
 
   for (var i = 2*numPolygons; i >= 1; i--) {
     
@@ -86,10 +91,11 @@ function generatePinwheel(numPolygons, numFaces) {
 
 }
 
-function generateBounceRipple(numPolygons, radius) {
+export function generateBounceRipple(scene, numPolygons, radius) {
 
   var x = [0, 0];
   var col = 0xf00a00;
+  let poly;
 
   for (var i = 1; i <= numPolygons; ++i) {
     var r = radius*i/10;
@@ -99,9 +105,10 @@ function generateBounceRipple(numPolygons, radius) {
 
 }
 
-function generateSloshRipple(numPolygons, radius) {
+export function generateSloshRipple(scene, numPolygons, radius) {
 
   var x = [0, 0];
+  let poly;
 
   for (var i = 1; i <= numPolygons; ++i) {
     var r = radius*i/10;
@@ -111,13 +118,14 @@ function generateSloshRipple(numPolygons, radius) {
 
 }
 
-function generateWrigglingDonut(numNodes, numPolygons, radius) {
+export function generateWrigglingDonut(scene, numNodes, numPolygons, radius) {
 
   var x = [0, 0];
+  let poly;
 
-  for (i = 1; i < numNodes; ++i) {
+  for (var i = 1; i < numNodes; ++i) {
 
-      for (j = 0; j < numNodes; ++j) {
+      for (var j = 0; j < numNodes; ++j) {
 
         x[0] = 0.2*Math.cos(phi(i, numNodes)) + 0.2*Math.cos(phi(j, numNodes))*Math.sin(phi(i, numPolygons));
         x[1] = 0.2*Math.sin(phi(i, numNodes)) + 0.2*Math.sin(phi(j, numNodes))*Math.cos(phi(i, numPolygons));
@@ -133,7 +141,7 @@ function generateWrigglingDonut(numNodes, numPolygons, radius) {
 
 }
 
-function updateCollide0scope(t) {
+export function updateCollide0scope(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
 
@@ -151,7 +159,7 @@ function updateCollide0scope(t) {
 
 }
 
-function updateGyr0scope(t) {
+export function updateGyr0scope(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
 
@@ -169,7 +177,7 @@ function updateGyr0scope(t) {
 
 }
 
-function updateConcentricPolygons(t) {
+export function updateConcentricPolygons(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
     scene.children[i].rotation.z = 2*(scene.children.length-i)*Math.sin(t/4);
@@ -177,7 +185,7 @@ function updateConcentricPolygons(t) {
 
 }
 
-function updateConcentricPolygons2(t) {
+export function updateConcentricPolygons2(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
     if (i % 2 === 0) {
@@ -190,7 +198,7 @@ function updateConcentricPolygons2(t) {
 
 }
 
-function updatePinwheel(numPolygons, t) {
+export function updatePinwheel(scene, numPolygons, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
     scene.children[i].rotation.z = 2*t*((scene.children.length/2)-i)*Math.PI*i/160;
@@ -198,7 +206,7 @@ function updatePinwheel(numPolygons, t) {
 
 }
 
-function updateBounceRipple(t) {
+export function updateBounceRipple(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
 
@@ -208,7 +216,7 @@ function updateBounceRipple(t) {
 
 }
 
-function updateSloshRipple(t) {
+export function updateSloshRipple(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
 
@@ -218,7 +226,7 @@ function updateSloshRipple(t) {
 
 }
 
-function updateWrigglingDonut(t) {
+export function updateWrigglingDonut(scene, t) {
 
   for (var i = 0; i < scene.children.length; ++i) {
 

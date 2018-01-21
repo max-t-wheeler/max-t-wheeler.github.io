@@ -9,3 +9,12 @@ The animations are recreations of similar projects I'd done earlier in OpenGL. I
 There's still plenty more to come, so check back for updates every once in a while.
 
 Hope you dig it.
+
+## installation
+```
+yarn global add webpack
+yarn install
+```
+
+## Run the dev server
+`yarn run start`
