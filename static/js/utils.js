@@ -1,42 +1,9 @@
+import * as THREE from 'three';
 
-////////////////////////////////Event Listeners//////////////////////////////
-
-function onWindowResize() {
-
-  canvasWidth = 3*window.innerWidth/4;
-  canvasHeight = window.innerHeight;
-
-  renderer.setSize(canvasWidth, canvasHeight);
-  camera.aspect = canvasWidth/canvasHeight;
-  camera.updateProjectionMatrix();
-
-};
-
-function withControls() {
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-}
-
-///////////////////////////////Initializers//////////////////////////////////
-
-function setRenderer(id, backgroundColor, width, height) {
-
-  renderer = new THREE.WebGLRenderer({canvas: document.getElementById(id), antialias: true});
-  renderer.setClearColor(backgroundColor);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(width, height);
-
-}
-
-function setCamera(width, height, offset) {
-
-  camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
-  camera.position.z = offset;
-
-}
 
 /////////////////////////////Styling//////////////////////////////////////
 
-function colorNodes(n) {
+export function colorNodes(n) {
 
   var mod = n%7;
 
@@ -87,7 +54,7 @@ function colorNodes(n) {
 
 /////////////////////////////WebGL Helper Functions//////////////////////////////////////
 
-function phi(t, n) {
+export function phi(t, n) {
   
   var p = 2*Math.PI*t/n;
 
@@ -95,9 +62,9 @@ function phi(t, n) {
 
 }
 
-function polygon(center, radius, numVertices, theta, color) {
+export function polygon(center, radius, numVertices, theta, color) {
 
-  vertices = new Float32Array(numVertices*3);
+  let vertices = new Float32Array(numVertices*3);
 
   for (var i = 0; i < numVertices; ++i) {
 
@@ -113,14 +80,14 @@ function polygon(center, radius, numVertices, theta, color) {
   this.numVertices = numVertices;
   this.theta = theta;
 
-  geometry = new THREE.BufferGeometry();
+  let geometry = new THREE.BufferGeometry();
 
   geometry.addAttribute(
     'position',
     new THREE.BufferAttribute(vertices, 3)
   );
 
-  material = new THREE.LineBasicMaterial( 
+  let material = new THREE.LineBasicMaterial( 
     {
       color: color
     } 
@@ -130,9 +97,9 @@ function polygon(center, radius, numVertices, theta, color) {
 
 }
 
-function offsetStar(numVertices, center, radius, theta, offset, color) {
+export function offsetStar(numVertices, center, radius, theta, offset, color) {
 
-  vertices = new Float32Array(numVertices*3);
+  let vertices = new Float32Array(numVertices*3);
 
   for (var i = 0; i < numVertices; ++i) {
 
@@ -148,14 +115,14 @@ function offsetStar(numVertices, center, radius, theta, offset, color) {
   this.numVertices = numVertices;
   this.theta = theta;
 
-  geometry = new THREE.BufferGeometry();
+  let geometry = new THREE.BufferGeometry();
 
   geometry.addAttribute(
     'position',
     new THREE.BufferAttribute(vertices, 3)
   );
 
-  material = new THREE.LineBasicMaterial( 
+  let material = new THREE.LineBasicMaterial( 
     {
       color: color
     } 
