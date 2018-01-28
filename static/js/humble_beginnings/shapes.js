@@ -1,16 +1,24 @@
-var geometry, material, mesh;
+import * as THREE from 'three';
 
-function generateTriangle() {
+import {
 
-  geometry = new THREE.BufferGeometry();
+  phi,
+  offsetStar,
+  polygon
 
-  var vertices = new Float32Array([
+} from '../utils'
+
+export function generateTriangle(scene) {
+
+  let geometry = new THREE.BufferGeometry();
+
+  let vertices = new Float32Array([
     -0.5, -0.5, 0.0,
      0.5, -0.5, 0.0,
      0.0,  0.5, 0.0
   ]);
 
-  var colors = new Float32Array([
+  let colors = new Float32Array([
     1.0, 0.0, 0.0,
     0.0, 1.0, 0.0, 
     0.0, 0.0, 1.0
@@ -26,23 +34,23 @@ function generateTriangle() {
     new THREE.BufferAttribute(colors, 3)
   );
 
-  material = new THREE.LineBasicMaterial(
+  let material = new THREE.LineBasicMaterial(
     {
       vertexColors: THREE.VertexColors
     }
   );
 
-  mesh = new THREE.Mesh(geometry, material);
+  let mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateRectangle() {
+export function generateRectangle(scene) {
 
-  geometry = new THREE.BufferGeometry();
+  let geometry = new THREE.BufferGeometry();
 
-  var vertices = new Float32Array([
+  let vertices = new Float32Array([
     -0.5, -0.5, 0.0,
      0.5, -0.5, 0.0,
      0.5,  0.5, 0.0,
@@ -51,7 +59,7 @@ function generateRectangle() {
      0.5,  0.5, 0.0
   ]);
 
-  var colors = new Float32Array([
+  let colors = new Float32Array([
     1.0, 0.0, 0.0,
     0.0, 1.0, 0.0, 
     0.0, 0.0, 1.0,
@@ -70,50 +78,51 @@ function generateRectangle() {
     new THREE.BufferAttribute(colors, 3)
   );
 
-  material = new THREE.MeshBasicMaterial(
+  let material = new THREE.MeshBasicMaterial(
     {
       vertexColors: THREE.VertexColors, 
       wireframe: false
     }
   );
 
-  mesh = new THREE.Mesh(geometry, material);
+  let mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateCube() {
+export function generateCube(scene) {
   
-  geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-  material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: false});
-  mesh = new THREE.Mesh(geometry, material);
+  let geometry = new THREE.BoxBufferGeometry(1, 1, 1);
+  let material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: false});
+  let mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateCircle(radius, numSpokes) {
+export function generateCircle(scene, radius, numSpokes) {
   
-  geometry = new THREE.CircleBufferGeometry(radius, numSpokes);
-  material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: true});
-  mesh = new THREE.Mesh(geometry, material);
+  let geometry = new THREE.CircleBufferGeometry(radius, numSpokes);
+  let material = new THREE.MeshBasicMaterial( {color: 0x00ffff, wireframe: true});
+  let mesh = new THREE.Mesh(geometry, material);
 
   scene.add(mesh);
 
 }
 
-function generateClam(numRidges, radius) {
+export function generateClam(scene, numRidges, radius) {
 
-  var phi = [];
+  let phi = [];
 
-  for (var i = 0; i <= numRidges; ++i) {
+  for (let i = 0; i <= numRidges; ++i) {
     phi.push(2*Math.PI*i/numRidges);
   }
 
-  var vertices = new Float32Array(phi.length*3);
+  let vertices = new Float32Array(phi.length*3);
 
-  for (var i = 0; i < vertices.length; ++i) {
+  for (let i = 0; i < vertices.length; ++i) {
+
     if (i%3 === 0) {
       vertices[i] = radius*Math.sqrt(1 - Math.pow(Math.cos(phi[i]),2))*Math.cos(phi[i]);
     }
@@ -123,27 +132,30 @@ function generateClam(numRidges, radius) {
     else if (i%3 === 2) {
       vertices[i] = 0;
     }
+
   }
 
-  geometry = new THREE.BufferGeometry();
+  let geometry = new THREE.BufferGeometry();
 
   geometry.addAttribute(
     'position', 
     new THREE.BufferAttribute(vertices, 3)
   );
 
-  material = new THREE.LineBasicMaterial(
+  let material = new THREE.LineBasicMaterial(
     {
       color: 0x00ffff
     }
   );
 
-  line = new THREE.Line(geometry, material);
+  let line = new THREE.Line(geometry, material);
 
   scene.add(line);
 
-  for (var i = 0; i < numRidges; ++i) {
-    var endpoints = new Float32Array(6);
+  for (let i = 0; i < numRidges; ++i) {
+
+    let endpoints = new Float32Array(6);
+
     endpoints[0] = 0;
     endpoints[1] = 0;
     endpoints[2] = 0;
@@ -151,37 +163,39 @@ function generateClam(numRidges, radius) {
     endpoints[4] = vertices[(3*i) + 1];
     endpoints[5] = vertices[(3*i) + 2];
 
-    var geometry = new THREE.BufferGeometry();
+    let geometry = new THREE.BufferGeometry();
 
     geometry.addAttribute(
       'position',
       new THREE.BufferAttribute(endpoints, 3)
     );
 
-    material = new THREE.LineBasicMaterial(
+    let material = new THREE.LineBasicMaterial(
       {
         color: 0x00ffff
       }
     );
 
-    line = new THREE.Line(geometry, material);
+    let line = new THREE.Line(geometry, material);
 
     scene.add(line);
+
   }
 
 }
 
-function generatePearl(numRidges, radius) {
+export function generatePearl(scene, numRidges, radius) {
 
-  var phi = [];
+  let phi = [];
 
-  for (var i = 0; i <= numRidges; ++i) {
+  for (let i = 0; i <= numRidges; ++i) {
     phi.push(2*Math.PI*i/numRidges);
   }
 
-  var vertices = new Float32Array(phi.length*3);
+  let vertices = new Float32Array(phi.length*3);
 
-  for (var i = 0; i < vertices.length; ++i) {
+  for (let i = 0; i < vertices.length; ++i) {
+
     if (i%3 === 0) {
       vertices[i] = radius*Math.sqrt(1 - Math.pow(Math.cos(phi[i]),2))*Math.cos(phi[i]);
     }
@@ -191,27 +205,30 @@ function generatePearl(numRidges, radius) {
     else if (i%3 === 2) {
       vertices[i] = 0;
     }
+
   }
 
-  geometry = new THREE.BufferGeometry();
+  let geometry = new THREE.BufferGeometry();
 
   geometry.addAttribute(
     'position', 
     new THREE.BufferAttribute(vertices, 3)
   );
 
-  material = new THREE.LineBasicMaterial(
+  let material = new THREE.LineBasicMaterial(
     {
       color: 0x00ffff
     }
   );
 
-  line = new THREE.Line(geometry, material);
+  let line = new THREE.Line(geometry, material);
 
   scene.add(line);
 
-  for (var i = 0; i < numRidges; ++i) {
-    var endpoints = new Float32Array(6);
+  for (let i = 0; i < numRidges; ++i) {
+
+    let endpoints = new Float32Array(6);
+
     endpoints[0] = 0;
     endpoints[1] = 0;
     endpoints[2] = 0;
@@ -219,85 +236,88 @@ function generatePearl(numRidges, radius) {
     endpoints[4] = vertices[(3*i) + 1];
     endpoints[5] = vertices[(3*i) + 2];
 
-    var geometry = new THREE.BufferGeometry();
+    let geometry = new THREE.BufferGeometry();
 
     geometry.addAttribute(
       'position',
       new THREE.BufferAttribute(endpoints, 3)
     );
 
-    material = new THREE.LineBasicMaterial(
+    let material = new THREE.LineBasicMaterial(
       {
         color: 0x00ffff
       }
     );
 
-    line = new THREE.Line(geometry, material);
+    let line = new THREE.Line(geometry, material);
 
     scene.add(line);
+
   }
 
-  var pearlGeometry = new THREE.CircleBufferGeometry(radius/10, 32);
+  let pearlGeometry = new THREE.CircleBufferGeometry(radius/10, 32);
 
-  var pearlMaterial = new THREE.MeshBasicMaterial(
+  let pearlMaterial = new THREE.MeshBasicMaterial(
     {
       color: 0xffffff
     }
   );
 
-  var pearl = new THREE.Mesh(pearlGeometry, pearlMaterial);
+  let pearl = new THREE.Mesh(pearlGeometry, pearlMaterial);
 
   scene.add(pearl);
 
 }
 
-function generatePolygon() {
+export function generatePolygon(scene) {
 
-  var x = [0, 0];
-  var r = 0.5;
-  var n = 6;
-  var t = 0;
-  var col = 0xf00a00;
+  let x = [0, 0];
+  let r = 0.5;
+  let n = 6;
+  let t = 0;
+  let col = 0xf00a00;
 
-
-  var poly = new polygon(x, r, n, t, col);
+  let poly = new polygon(x, r, n, t, col);
 
   scene.add(poly.line);
 
 }
 
-function generateSacredCircles(numCircles, radius, color) {
+export function generateSacredCircles(scene, numCircles, numLayers, circleRadius, globalRadius, color) {
 
-  var center = [0, 0];
+  let center = [0, 0];
 
-  for (var i = 0; i < numCircles; ++i) {
+  for (let i = 0; i < numCircles; ++i) {
 
-    var x = center;
+    for (let j = 0; j < numLayers; ++j) {
 
-    x[0] = radius*Math.cos(phi(i, numCircles));
-    x[1] = radius*Math.sin(phi(i, numCircles));
+      let x = center;
 
-    poly = new polygon(x, radius, 100, 0, color);
+      x[0] = globalRadius*(Math.cos(phi(i, numCircles)) + Math.sin(phi(j, numLayers)));
+      x[1] = globalRadius*(Math.sin(phi(i, numCircles)) + Math.cos(phi(j, numLayers)));
 
-    scene.add(poly.line);
+      let poly = new polygon(x, circleRadius, 100, 0, color);
+
+      scene.add(poly.line);
+
+    }
 
   }
 
 }
 
-function generateOffsetStar(numVertices, radius, offset, color) {
+export function generateOffsetStar(scene, numVertices, radius, offset, color) {
 
-  var x = [0, 0];
-
-  var star = new offsetStar(numVertices, x, radius, 0, offset, color);
+  let x = [0, 0];
+  let star = new offsetStar(numVertices, x, radius, 0, offset, color);
+  
   scene.add(star.line);
-
 
 }
 
-function updatePolygon(t) {
+export function updatePolygon(scene, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
+  for (let i = 0; i < scene.children.length; ++i) {
     scene.children[i].rotation.z += t;
   }
 

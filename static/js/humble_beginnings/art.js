@@ -1,12 +1,20 @@
-var geometry, material, mesh;
+import * as THREE from 'three';
 
-function generateCollide0scope(numCircles) {
+import { 
 
-  for (var i = 0; i < numCircles; ++i) {
+colorNodes,
+phi,
+polygon 
+
+} from '../utils'
+
+export function generateCollide0scope(scene, numCircles) {
+
+  for (let i = 0; i < numCircles; ++i) {
     
-    geometry = new THREE.CircleBufferGeometry(1+(i/(10*numCircles)), 10);
-    material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: true});
-    mesh = new THREE.Mesh(geometry, material);
+    let geometry = new THREE.CircleBufferGeometry(1+(i/(10*numCircles)), 10);
+    let material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: true});
+    let mesh = new THREE.Mesh(geometry, material);
 
     scene.add(mesh);
 
@@ -14,13 +22,13 @@ function generateCollide0scope(numCircles) {
 
 }
 
-function generateGyr0scope(numCircles) {
+export function generateGyr0scope(scene, numCircles) {
 
-  for (var i = 0; i < numCircles; ++i) {
+  for (let i = 0; i < numCircles; ++i) {
     
-    geometry = new THREE.CircleBufferGeometry(1+(i/(10*numCircles)), 10);
-    material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: true});
-    mesh = new THREE.Mesh(geometry, material);
+    let geometry = new THREE.CircleBufferGeometry(1+(i/(10*numCircles)), 10);
+    let material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: true});
+    let mesh = new THREE.Mesh(geometry, material);
 
     scene.add(mesh);
 
@@ -28,13 +36,13 @@ function generateGyr0scope(numCircles) {
 
 }
 
-function generateBlanket(numPolygons, numFaces) {
+export function generateBlanket(scene, numPolygons, numFaces) {
 
-  for (var i = 2*numPolygons; i >= 1; i--) {
+  for (let i = 2*numPolygons; i >= 1; i--) {
     
-    geometry = new THREE.CircleBufferGeometry((10/(2*numPolygons-i+1)), numFaces);
-    material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: false});
-    mesh = new THREE.Mesh(geometry, material);
+    let geometry = new THREE.CircleBufferGeometry((10/(2*numPolygons-i+1)), numFaces);
+    let material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: false});
+    let mesh = new THREE.Mesh(geometry, material);
 
     mesh.rotateZ(Math.PI*i/4);
 
@@ -44,13 +52,13 @@ function generateBlanket(numPolygons, numFaces) {
 
 }
 
-function generateConcentricPolygons(numPolygons, numFaces) {
+export function generateConcentricPolygons(scene, numPolygons, numFaces) {
 
-  for (var i = numPolygons; i >= 1; i--) {
+  for (let i = numPolygons; i >= 1; i--) {
   
-    geometry = new THREE.CircleBufferGeometry((10/(numPolygons-i+1)), numFaces);
-    material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: false});
-    mesh = new THREE.Mesh(geometry, material);
+    let geometry = new THREE.CircleBufferGeometry((10/(numPolygons-i+1)), numFaces);
+    let material = new THREE.MeshBasicMaterial( {color: colorNodes(i), wireframe: false});
+    let mesh = new THREE.Mesh(geometry, material);
 
     scene.add(mesh);
 
@@ -58,27 +66,30 @@ function generateConcentricPolygons(numPolygons, numFaces) {
 
 }
 
-function generateConcentricPolygons2(numPolygons, radius) {
+export function generateConcentricPolygons2(scene, numPolygons, radius) {
 
-  var x = [0, 0];
-  var t = 0;
-  var col = 0xf00a00;
+  let x = [0, 0];
+  let t = 0;
+  let col = 0xf00a00;
 
-  for (var i = 1; i <= numPolygons; ++i) {
-    var r = radius*i/numPolygons;
-    poly = new polygon(x, r, i+2, t, col);
-    scene.add(poly.line);
-  }
+  for (let i = 1; i <= numPolygons; ++i) {
 
-}
-
-function generatePinwheel(numPolygons, numFaces) {
-
-  for (var i = 2*numPolygons; i >= 1; i--) {
+    let r = radius*i/numPolygons;
+    let poly = new polygon(x, r, i+2, t, col);
     
-    geometry = new THREE.CircleBufferGeometry((20/(2*numPolygons-(i/2)+1)), numFaces);
-    material = new THREE.MeshBasicMaterial( {color: colorNodes(i+1), wireframe: false});
-    mesh = new THREE.Mesh(geometry, material);
+    scene.add(poly.line);
+  
+  }
+
+}
+
+export function generatePinwheel(scene, numPolygons, numFaces) {
+
+  for (let i = 2*numPolygons; i >= 1; i--) {
+    
+    let geometry = new THREE.CircleBufferGeometry((20/(2*numPolygons-(i/2)+1)), numFaces);
+    let material = new THREE.MeshBasicMaterial( {color: colorNodes(i+1), wireframe: false});
+    let mesh = new THREE.Mesh(geometry, material);
 
     scene.add(mesh);
 
@@ -86,45 +97,49 @@ function generatePinwheel(numPolygons, numFaces) {
 
 }
 
-function generateBounceRipple(numPolygons, radius) {
+export function generateBounceRipple(scene, numPolygons, radius) {
 
-  var x = [0, 0];
-  var col = 0xf00a00;
+  let x = [0, 0];
+  let col = 0xf00a00;
 
-  for (var i = 1; i <= numPolygons; ++i) {
-    var r = radius*i/10;
-    poly = new polygon(x, r, 100, 0, col);
+  for (let i = 1; i <= numPolygons; ++i) {
+
+    let r = radius*i/10;
+    let poly = new polygon(x, r, 100, 0, col);
+    
     scene.add(poly.line);
+  
   }
 
 }
 
-function generateSloshRipple(numPolygons, radius) {
+export function generateSloshRipple(scene, numPolygons, radius) {
 
-  var x = [0, 0];
+  let x = [0, 0];
 
-  for (var i = 1; i <= numPolygons; ++i) {
-    var r = radius*i/10;
-    poly = new polygon(x, r, 100, 0, colorNodes(i-1));
+  for (let i = 1; i <= numPolygons; ++i) {
+
+    let r = radius*i/10;
+    let poly = new polygon(x, r, 100, 0, colorNodes(i-1));
+    
     scene.add(poly.line);
+  
   }
 
 }
 
-function generateWrigglingDonut(numNodes, numPolygons, radius) {
+export function generateWrigglingDonut(scene, numNodes, numPolygons, polyRadius, globalRadius) {
 
-  var x = [0, 0];
+  let x = [0, 0];
 
-  for (i = 1; i < numNodes; ++i) {
+  for (let i = 1; i < numNodes; ++i) {
 
-      for (j = 0; j < numNodes; ++j) {
+      for (let j = 0; j < numNodes; ++j) {
 
-        x[0] = 0.2*Math.cos(phi(i, numNodes)) + 0.2*Math.cos(phi(j, numNodes))*Math.sin(phi(i, numPolygons));
-        x[1] = 0.2*Math.sin(phi(i, numNodes)) + 0.2*Math.sin(phi(j, numNodes))*Math.cos(phi(i, numPolygons));
+        x[0] = globalRadius*(Math.cos(phi(i, numNodes)) + Math.cos(phi(j, numNodes))*Math.sin(phi(i, numPolygons)));
+        x[1] = globalRadius*(Math.sin(phi(i, numNodes)) + Math.sin(phi(j, numNodes))*Math.cos(phi(i, numPolygons)));
 
-
-
-        poly = new polygon(x, radius, numNodes, 0, colorNodes(1));
+        let poly = new polygon(x, polyRadius, numNodes, 0, colorNodes(1));
         scene.add(poly.line);
 
     }
@@ -133,96 +148,147 @@ function generateWrigglingDonut(numNodes, numPolygons, radius) {
 
 }
 
-function updateCollide0scope(t) {
+export function generateApollo(scene, numNodes, numPolygons, polyRadius, globalRadius) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
+  let x = [0, 0];
 
-    var r = 1+(i/5);
+  for (let i = 1; i < numNodes; ++i) {
+
+      for (let j = 0; j < numNodes; ++j) {
+
+        for (let k = 0; k < numPolygons; ++k) {
+
+          x[0] = globalRadius*(Math.cos(phi(i, numNodes)) + Math.cos(phi(j, numNodes)))*Math.sin(phi(k, numPolygons));
+          x[1] = globalRadius*(Math.sin(phi(i, numNodes)) + Math.sin(phi(j, numNodes)))*Math.cos(phi(k, numPolygons));
+
+          let poly = new polygon(x, polyRadius, numNodes, 0, colorNodes(1));
+          scene.add(poly.line);
+
+        }
+
+    }
+
+  }
+
+}
+
+export function updateCollide0scope(scene, t) {
+
+  for (let i = 0; i < scene.children.length; ++i) {
+
+    let r = 1+(i/5);
 
     if (i%2 == 0) {
+
       scene.children[i].position.z += (0.005 + (i/1000))*Math.cos(t);
       scene.children[i].rotation.z -= 0.01*Math.cos(t);
+
     }
     else {
+
       scene.children[i].position.z -= (0.005 + (i/1000))*Math.cos(t);
       scene.children[i].rotation.z += 0.01*Math.sin(t);
+
     }
+
   }
 
 }
 
-function updateGyr0scope(t) {
+export function updateGyr0scope(scene, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
+  for (let i = 0; i < scene.children.length; ++i) {
 
-    var r = 1;
+    let r = 1;
 
     if (i%2 == 0) {
+
       scene.children[i].scale.set(1, r*Math.cos(t/2), 2);
       scene.children[i].rotation.z -= 0.01*Math.cos(t);
+
     }
     else {
+
       scene.children[i].scale.set(1, r*Math.sin(t/2), 1);
       scene.children[i].rotation.z += 0.01*Math.sin(t);
+
     }
+
   }
 
 }
 
-function updateConcentricPolygons(t) {
+export function updateConcentricPolygons(scene, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
+  for (let i = 0; i < scene.children.length; ++i) {
     scene.children[i].rotation.z = 2*(scene.children.length-i)*Math.sin(t/4);
   }
 
 }
 
-function updateConcentricPolygons2(t) {
+export function updateConcentricPolygons2(scene, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
+  for (let i = 0; i < scene.children.length; ++i) {
+
     if (i % 2 === 0) {
       scene.children[i].rotation.z = Math.sin(i)*t/2;
     }
     else {
       scene.children[i].rotation.z = Math.sin(-i)*t/2;
     }
+
   }
 
 }
 
-function updatePinwheel(numPolygons, t) {
+export function updatePinwheel(scene, numPolygons, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
+  for (let i = 0; i < scene.children.length; ++i) {
     scene.children[i].rotation.z = 2*t*((scene.children.length/2)-i)*Math.PI*i/160;
   }
 
 }
 
-function updateBounceRipple(t) {
+export function updateBounceRipple(scene, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
-
+  for (let i = 0; i < scene.children.length; ++i) {
     scene.children[i].scale.set(Math.cos(t)*Math.sin(phi(i, 100) + 2*t), Math.cos(t)*Math.sin(phi(i, 100) + 2*t), 1);
-
   }
 
 }
 
-function updateSloshRipple(t) {
+export function updateSloshRipple(scene, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
-
+  for (let i = 0; i < scene.children.length; ++i) {
     scene.children[i].scale.set(Math.cos(phi(i, 100) + t/100), Math.cos(phi(i, 100) + t/100), 1);
-
   }
 
 }
 
-function updateWrigglingDonut(t) {
+export function updateWrigglingDonut(scene, t) {
 
-  for (var i = 0; i < scene.children.length; ++i) {
-
+  for (let i = 0; i < scene.children.length; ++i) {
     scene.children[i].rotation.z -= 10*t;
+  }
+
+}
+
+export function updateApollo(scene, t) {
+
+  for (let i = 0; i < scene.children.length; ++i) {
+
+    if (i%2 === 0) {
+      scene.children[i].rotation.z -= 1e-3;
+      //scene.children[i].rotation.z -= Math.sin(t/1000)/10;
+      //scene.children[i].scale.set(Math.cos(phi(i, 100) + t/10));
+      //scene.children[i].scale.set(Math.cos(phi(i, 100) + t/10), -Math.sin(phi(i, 100) + t/10), Math.cos(t));
+    }
+    else {
+      scene.children[i].rotation.z += 1e-3;
+      //scene.children[i].rotation.z += Math.sin(t/1000)/5;
+      //scene.children[i].scale.set(-Math.cos(phi(i, 100) + t/10));
+      //scene.children[i].scale.set(-Math.sin(phi(i, 100) + t/10), Math.cos(phi(i, 100) + t/10), Math.sin(t));
+    }
 
   }
 
