@@ -226,8 +226,6 @@ export default class CanvasManager {
         break;
       case "gyro":
         updateGyr0scope(this.scene, this.dt);
-        break;      
-      case "sine wave":
         break;
       case "concentric polygons":
         updateConcentricPolygons(this.scene, this.dt);

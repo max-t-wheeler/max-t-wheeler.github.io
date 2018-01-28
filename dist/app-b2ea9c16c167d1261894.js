@@ -46959,8 +46959,6 @@ var CanvasManager = function () {
         case "gyro":
           (0, _art.updateGyr0scope)(this.scene, this.dt);
           break;
-        case "sine wave":
-          break;
         case "concentric polygons":
           (0, _art.updateConcentricPolygons)(this.scene, this.dt);
           break;
@@ -47271,9 +47269,7 @@ function updatePolygon(scene, t) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderSineWave = renderSineWave;
 exports.generateSineWave = generateSineWave;
-exports.updateSineWave = updateSineWave;
 
 var _three = __webpack_require__(0);
 
@@ -47281,7 +47277,7 @@ var THREE = _interopRequireWildcard(_three);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function renderSineWave(scene, numPoints) {
+function generateSineWave(scene, numPoints) {
 
   var node_x = [];
   var node_y = [];
@@ -47314,76 +47310,6 @@ function renderSineWave(scene, numPoints) {
   var line = new THREE.Line(geometry, material);
 
   scene.add(line);
-}
-
-function generateSineWave(scene, numPoints) {
-
-  var node_x = [];
-  var node_y = [];
-
-  for (var i = -numPoints; i <= numPoints; ++i) {
-    node_x.push(i / 1000);
-    node_y.push(Math.sin(10 * node_x[i + numPoints]) / 2);
-  }
-
-  var vertices = new Float32Array(node_x.length * 3);
-
-  for (var _i2 = 0; _i2 < vertices.length; ++_i2) {
-    if (_i2 % 3 === 0) {
-      vertices[_i2] = node_x[_i2];
-    } else if (_i2 % 3 === 1) {
-      vertices[_i2] = node_y[_i2];
-    } else if (_i2 % 3 === 2) {
-      vertices[_i2] = 0;
-    }
-  }
-
-  for (var _i3 = 0; _i3 < node_x.length - 1; ++_i3) {
-    var endpoints = new Float32Array(6);
-    endpoints[0] = vertices[3 * _i3 + 0];
-    endpoints[1] = vertices[3 * _i3 + 1];
-    endpoints[2] = vertices[3 * _i3 + 2];
-    endpoints[3] = vertices[3 * (_i3 + 1) + 0];
-    endpoints[4] = vertices[3 * (_i3 + 1) + 1];
-    endpoints[5] = vertices[3 * (_i3 + 1) + 2];
-
-    var geometry = new THREE.BufferGeometry();
-
-    geometry.addAttribute('position', new THREE.BufferAttribute(endpoints, 3));
-
-    var material = new THREE.LineBasicMaterial({
-      color: 0x00ffff
-    });
-
-    var line = new THREE.Line(geometry, material);
-
-    scene.add(line);
-  }
-}
-
-function updateSineWave(scene, numPoints, t) {
-
-  //console.log(Math.sin(t));
-
-  for (var i = 0; i < numPoints; ++i) {
-
-    //console.log(scene.children[i].geometry.attributes.position.array[1]);
-    //amplitude mod
-
-    //console.log(scene.children[i].matrixWorld);
-    //scene.children[i].position.x += 0.01*Math.cos(t);
-
-    //scene.children[i].matrixWorld.scale(Math.sin(t));
-    //scene.children[i].matrixWorld.makeRotationZ(t);
-    //scene.children[i].updateMatrix();
-
-    node_y[i] *= 0.001 * Math.sin(i * t / numPoints);
-    scene.children[i].updateMatrix();
-    //scene.children[i].position.y += 0.001*Math.sin(i*t/numPoints)*Math.cos(2*i*t/numPoints);
-
-    //scene.children[i].geometry.attributes.position.array[1] *= 0.0001*Math.sin(t);
-    //scene.children[i].geometry.attributes.position.array[4] *= 0.0001*Math.sin(t);
-  }
 }
 
 /***/ }),
@@ -48985,4 +48911,4 @@ module.exports = function (css) {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=app-093d03c710f316d3cb09.js.map
+//# sourceMappingURL=app-b2ea9c16c167d1261894.js.map

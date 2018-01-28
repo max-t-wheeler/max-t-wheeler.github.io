@@ -36,7 +36,7 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			hash: true,
-			template: "./index.html"
+			template: "./build-index.html"
 		})
 	]
 }
