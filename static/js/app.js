@@ -1,4 +1,4 @@
-require("style-loader!../css/opengl_webgl_conversion.css");
+require("style-loader!../css/index.css");
 
 import CanvasManager from './canvasManager';
 
@@ -122,6 +122,15 @@ let app = new Vue({
       },
 
       {
+        text: 'physics / sine wave',
+        name: 'sine wave',
+        dynamic: false,
+        controllable: true,
+        address: '/opengl_webgl_conversion#physics_sine_wave',
+        active: false
+      },
+
+      {
         text: 'art / collide0scope',
         name: 'collide',
         dynamic: true,
@@ -136,15 +145,6 @@ let app = new Vue({
         dynamic: true,
         controllable: true,
         address: '/opengl_webgl_conversion#art_gyr0scope',
-        active: false
-      },
-
-      {
-        text: 'physics / sine wave',
-        name: 'sine wave',
-        dynamic: true,
-        controllable: true,
-        address: '/opengl_webgl_conversion#physics_sine_wave',
         active: false
       },
 

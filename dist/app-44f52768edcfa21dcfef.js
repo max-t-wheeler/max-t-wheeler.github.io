@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -46053,6 +46053,49 @@ function CanvasRenderer() {
 
 
 Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Animation = function () {
+	function Animation(scene, animation) {
+		_classCallCheck(this, Animation);
+
+		this.scene = scene;
+
+		this.name = animation.name;
+		this.dynamic = animation.dynamic;
+		this.controllable = animation.controllable;
+	}
+
+	_createClass(Animation, [{
+		key: "draw",
+		value: function draw() {
+			return;
+		}
+	}, {
+		key: "update",
+		value: function update() {
+			return;
+		}
+	}]);
+
+	return Animation;
+}();
+
+exports.default = Animation;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.colorNodes = colorNodes;
@@ -46168,7 +46211,7 @@ function offsetStar(numVertices, center, radius, theta, offset, color) {
 }
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -46234,7 +46277,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(13);
+var	fixUrls = __webpack_require__(32);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -46550,19 +46593,19 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _canvasManager = __webpack_require__(4);
+var _canvasManager = __webpack_require__(5);
 
 var _canvasManager2 = _interopRequireDefault(_canvasManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(9);
+__webpack_require__(28);
 
 var canvasManager = void 0;
 
@@ -46662,6 +46705,13 @@ var app = new Vue({
       address: '/opengl_webgl_conversion#star',
       active: false
     }, {
+      text: 'physics / sine wave',
+      name: 'sine wave',
+      dynamic: false,
+      controllable: true,
+      address: '/opengl_webgl_conversion#physics_sine_wave',
+      active: false
+    }, {
       text: 'art / collide0scope',
       name: 'collide',
       dynamic: true,
@@ -46674,13 +46724,6 @@ var app = new Vue({
       dynamic: true,
       controllable: true,
       address: '/opengl_webgl_conversion#art_gyr0scope',
-      active: false
-    }, {
-      text: 'physics / sine wave',
-      name: 'sine wave',
-      dynamic: true,
-      controllable: true,
-      address: '/opengl_webgl_conversion#physics_sine_wave',
       active: false
     }, {
       text: 'art / concentric polygons',
@@ -46750,7 +46793,7 @@ var app = new Vue({
 });
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46766,19 +46809,15 @@ var _three = __webpack_require__(0);
 
 var THREE = _interopRequireWildcard(_three);
 
-var _utils = __webpack_require__(1);
+var _utils = __webpack_require__(2);
 
-var _shapes = __webpack_require__(5);
-
-var _physics = __webpack_require__(6);
-
-var _art = __webpack_require__(7);
+var _index = __webpack_require__(6);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var OrbitControls = __webpack_require__(8)(THREE);
+var OrbitControls = __webpack_require__(27)(THREE);
 
 var CanvasManager = function () {
   function CanvasManager(canvas, animation) {
@@ -46803,15 +46842,15 @@ var CanvasManager = function () {
 
     // initialize animation
 
-    this.animation = animation;
+    this.scene = new THREE.Scene();
+
+    this.animation = (0, _index.generateAnimation)(this.scene, animation);
 
     if (this.animation.controllable) {
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     }
 
     this.dt = 0;
-
-    this.scene = new THREE.Scene();
 
     this.draw();
 
@@ -46862,64 +46901,64 @@ var CanvasManager = function () {
       switch (this.animation.name) {
 
         case "triangle":
-          (0, _shapes.generateTriangle)(this.scene);
+          this.animation.draw();
           break;
         case "rectangle":
-          (0, _shapes.generateRectangle)(this.scene);
+          this.animation.draw();
           break;
         case "cube":
-          (0, _shapes.generateCube)(this.scene);
+          this.animation.draw();
           break;
         case "circle":
-          (0, _shapes.generateCircle)(this.scene, 1, 5);
+          this.animation.draw(5, 1);
           break;
         case "clam":
-          (0, _shapes.generateClam)(this.scene, 200, 1);
+          this.animation.draw(200, 1);
           break;
         case "pearl":
-          (0, _shapes.generatePearl)(this.scene, 200, 1);
+          this.animation.draw(200, 1);
           break;
         case "polystarter":
-          (0, _shapes.generatePolygon)(this.scene);
+          this.animation.draw();
           break;
         case "sacred circles":
-          (0, _shapes.generateSacredCircles)(this.scene, 16, 5, 1, 1, (0, _utils.colorNodes)(0));
+          this.animation.draw(16, 5, 1, 1, (0, _utils.colorNodes)(0));
           break;
         case "star":
-          (0, _shapes.generateOffsetStar)(this.scene, 10, 1, 2, (0, _utils.colorNodes)(0));
+          this.animation.draw(10, 1, 2, (0, _utils.colorNodes)(0));
           break;
         case "collide":
-          (0, _art.generateCollide0scope)(this.scene, 20);
+          this.animation.draw(20);
           break;
         case "gyro":
-          (0, _art.generateGyr0scope)(this.scene, 20);
+          this.animation.draw(20);
           break;
         case "sine wave":
-          (0, _physics.generateSineWave)(this.scene, 1500);
+          this.animation.draw(1500);
           break;
         case "concentric polygons":
-          (0, _art.generateConcentricPolygons)(this.scene, 10, 5);
+          this.animation.draw(10, 5);
           break;
         case "concentric polygons 2":
-          (0, _art.generateConcentricPolygons2)(this.scene, 20, 5);
+          this.animation.draw(20, 5);
           break;
         case "pinwheel":
-          (0, _art.generatePinwheel)(this.scene, 10, 4);
+          this.animation.draw(10, 4);
           break;
         case "blanket":
-          (0, _art.generateBlanket)(this.scene, 10, 4);
+          this.animation.draw(10, 4);
           break;
         case "bounce ripple":
-          (0, _art.generateBounceRipple)(this.scene, 10, 3);
+          this.animation.draw(10, 3);
           break;
         case "slosh ripple":
-          (0, _art.generateSloshRipple)(this.scene, 200, 3);
+          this.animation.draw(200, 3);
           break;
         case "wriggling donut":
-          (0, _art.generateWrigglingDonut)(this.scene, 40, 10, 1, 0.2);
+          this.animation.draw(40, 10, 1, 0.2);
           break;
         case "apollo":
-          (0, _art.generateApollo)(this.scene, 8, 10, 1, 2);
+          this.animation.draw(8, 10, 1, 2);
           break;
         default:
           alert("Please enter a valid animation");
@@ -46944,48 +46983,7 @@ var CanvasManager = function () {
           this.dt -= 2 * Math.PI * 1e6;
         }
 
-        this.update();
-      }
-    }
-  }, {
-    key: 'update',
-    value: function update() {
-
-      switch (this.animation.name) {
-
-        case "collide":
-          (0, _art.updateCollide0scope)(this.scene, this.dt);
-          break;
-        case "gyro":
-          (0, _art.updateGyr0scope)(this.scene, this.dt);
-          break;
-        case "concentric polygons":
-          (0, _art.updateConcentricPolygons)(this.scene, this.dt);
-          break;
-        case "concentric polygons 2":
-          (0, _art.updateConcentricPolygons2)(this.scene, this.dt);
-          break;
-        case "pinwheel":
-          (0, _art.updatePinwheel)(this.scene, 10, this.dt);
-          break;
-        case "polystarter":
-          (0, _shapes.updatePolygon)(this.scene, 1);
-          break;
-        case "bounce ripple":
-          (0, _art.updateBounceRipple)(this.scene, this.dt);
-          break;
-        case "slosh ripple":
-          (0, _art.updateSloshRipple)(this.scene, this.dt);
-          break;
-        case "wriggling donut":
-          (0, _art.updateWrigglingDonut)(this.scene, this.dt);
-          break;
-        case "apollo":
-          (0, _art.updateApollo)(this.scene, this.dt);
-          break;
-        default:
-          break;
-
+        this.animation.update(this.dt);
       }
     }
   }]);
@@ -46996,270 +46994,6 @@ var CanvasManager = function () {
 exports.default = CanvasManager;
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.generateTriangle = generateTriangle;
-exports.generateRectangle = generateRectangle;
-exports.generateCube = generateCube;
-exports.generateCircle = generateCircle;
-exports.generateClam = generateClam;
-exports.generatePearl = generatePearl;
-exports.generatePolygon = generatePolygon;
-exports.generateSacredCircles = generateSacredCircles;
-exports.generateOffsetStar = generateOffsetStar;
-exports.updatePolygon = updatePolygon;
-
-var _three = __webpack_require__(0);
-
-var THREE = _interopRequireWildcard(_three);
-
-var _utils = __webpack_require__(1);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function generateTriangle(scene) {
-
-  var geometry = new THREE.BufferGeometry();
-
-  var vertices = new Float32Array([-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0]);
-
-  var colors = new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]);
-
-  geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-
-  geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-  var material = new THREE.LineBasicMaterial({
-    vertexColors: THREE.VertexColors
-  });
-
-  var mesh = new THREE.Mesh(geometry, material);
-
-  scene.add(mesh);
-}
-
-function generateRectangle(scene) {
-
-  var geometry = new THREE.BufferGeometry();
-
-  var vertices = new Float32Array([-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.5, 0.5, 0.0, -0.5, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, 0.5, 0.0]);
-
-  var colors = new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]);
-
-  geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-
-  geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-  var material = new THREE.MeshBasicMaterial({
-    vertexColors: THREE.VertexColors,
-    wireframe: false
-  });
-
-  var mesh = new THREE.Mesh(geometry, material);
-
-  scene.add(mesh);
-}
-
-function generateCube(scene) {
-
-  var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-  var material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: false });
-  var mesh = new THREE.Mesh(geometry, material);
-
-  scene.add(mesh);
-}
-
-function generateCircle(scene, radius, numSpokes) {
-
-  var geometry = new THREE.CircleBufferGeometry(radius, numSpokes);
-  var material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true });
-  var mesh = new THREE.Mesh(geometry, material);
-
-  scene.add(mesh);
-}
-
-function generateClam(scene, numRidges, radius) {
-
-  var phi = [];
-
-  for (var i = 0; i <= numRidges; ++i) {
-    phi.push(2 * Math.PI * i / numRidges);
-  }
-
-  var vertices = new Float32Array(phi.length * 3);
-
-  for (var _i = 0; _i < vertices.length; ++_i) {
-
-    if (_i % 3 === 0) {
-      vertices[_i] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i]), 2)) * Math.cos(phi[_i]);
-    } else if (_i % 3 === 1) {
-      vertices[_i] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i]), 2)) * Math.sin(phi[_i]);
-    } else if (_i % 3 === 2) {
-      vertices[_i] = 0;
-    }
-  }
-
-  var geometry = new THREE.BufferGeometry();
-
-  geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-
-  var material = new THREE.LineBasicMaterial({
-    color: 0x00ffff
-  });
-
-  var line = new THREE.Line(geometry, material);
-
-  scene.add(line);
-
-  for (var _i2 = 0; _i2 < numRidges; ++_i2) {
-
-    var endpoints = new Float32Array(6);
-
-    endpoints[0] = 0;
-    endpoints[1] = 0;
-    endpoints[2] = 0;
-    endpoints[3] = vertices[3 * _i2 + 0];
-    endpoints[4] = vertices[3 * _i2 + 1];
-    endpoints[5] = vertices[3 * _i2 + 2];
-
-    var _geometry = new THREE.BufferGeometry();
-
-    _geometry.addAttribute('position', new THREE.BufferAttribute(endpoints, 3));
-
-    var _material = new THREE.LineBasicMaterial({
-      color: 0x00ffff
-    });
-
-    var _line = new THREE.Line(_geometry, _material);
-
-    scene.add(_line);
-  }
-}
-
-function generatePearl(scene, numRidges, radius) {
-
-  var phi = [];
-
-  for (var i = 0; i <= numRidges; ++i) {
-    phi.push(2 * Math.PI * i / numRidges);
-  }
-
-  var vertices = new Float32Array(phi.length * 3);
-
-  for (var _i3 = 0; _i3 < vertices.length; ++_i3) {
-
-    if (_i3 % 3 === 0) {
-      vertices[_i3] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i3]), 2)) * Math.cos(phi[_i3]);
-    } else if (_i3 % 3 === 1) {
-      vertices[_i3] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i3]), 2)) * Math.sin(phi[_i3]);
-    } else if (_i3 % 3 === 2) {
-      vertices[_i3] = 0;
-    }
-  }
-
-  var geometry = new THREE.BufferGeometry();
-
-  geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-
-  var material = new THREE.LineBasicMaterial({
-    color: 0x00ffff
-  });
-
-  var line = new THREE.Line(geometry, material);
-
-  scene.add(line);
-
-  for (var _i4 = 0; _i4 < numRidges; ++_i4) {
-
-    var endpoints = new Float32Array(6);
-
-    endpoints[0] = 0;
-    endpoints[1] = 0;
-    endpoints[2] = 0;
-    endpoints[3] = vertices[3 * _i4 + 0];
-    endpoints[4] = vertices[3 * _i4 + 1];
-    endpoints[5] = vertices[3 * _i4 + 2];
-
-    var _geometry2 = new THREE.BufferGeometry();
-
-    _geometry2.addAttribute('position', new THREE.BufferAttribute(endpoints, 3));
-
-    var _material2 = new THREE.LineBasicMaterial({
-      color: 0x00ffff
-    });
-
-    var _line2 = new THREE.Line(_geometry2, _material2);
-
-    scene.add(_line2);
-  }
-
-  var pearlGeometry = new THREE.CircleBufferGeometry(radius / 10, 32);
-
-  var pearlMaterial = new THREE.MeshBasicMaterial({
-    color: 0xffffff
-  });
-
-  var pearl = new THREE.Mesh(pearlGeometry, pearlMaterial);
-
-  scene.add(pearl);
-}
-
-function generatePolygon(scene) {
-
-  var x = [0, 0];
-  var r = 0.5;
-  var n = 6;
-  var t = 0;
-  var col = 0xf00a00;
-
-  var poly = new _utils.polygon(x, r, n, t, col);
-
-  scene.add(poly.line);
-}
-
-function generateSacredCircles(scene, numCircles, numLayers, circleRadius, globalRadius, color) {
-
-  var center = [0, 0];
-
-  for (var i = 0; i < numCircles; ++i) {
-
-    for (var j = 0; j < numLayers; ++j) {
-
-      var x = center;
-
-      x[0] = globalRadius * (Math.cos((0, _utils.phi)(i, numCircles)) + Math.sin((0, _utils.phi)(j, numLayers)));
-      x[1] = globalRadius * (Math.sin((0, _utils.phi)(i, numCircles)) + Math.cos((0, _utils.phi)(j, numLayers)));
-
-      var poly = new _utils.polygon(x, circleRadius, 100, 0, color);
-
-      scene.add(poly.line);
-    }
-  }
-}
-
-function generateOffsetStar(scene, numVertices, radius, offset, color) {
-
-  var x = [0, 0];
-  var star = new _utils.offsetStar(numVertices, x, radius, 0, offset, color);
-
-  scene.add(star.line);
-}
-
-function updatePolygon(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-    scene.children[i].rotation.z += t;
-  }
-}
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -47267,49 +47001,122 @@ function updatePolygon(scene, t) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-exports.generateSineWave = generateSineWave;
+exports.generateAnimation = generateAnimation;
 
-var _three = __webpack_require__(0);
+var _triangle = __webpack_require__(7);
 
-var THREE = _interopRequireWildcard(_three);
+var _triangle2 = _interopRequireDefault(_triangle);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _rectangle = __webpack_require__(8);
 
-function generateSineWave(scene, numPoints) {
+var _rectangle2 = _interopRequireDefault(_rectangle);
 
-  var node_x = [];
-  var node_y = [];
+var _cube = __webpack_require__(9);
 
-  for (var i = -numPoints; i <= numPoints; ++i) {
-    node_x.push(i / 1000);
-    node_y.push(Math.sin(10 * node_x[i + numPoints]) / 2);
-  }
+var _cube2 = _interopRequireDefault(_cube);
 
-  var vertices = new Float32Array(node_x.length * 3);
+var _circle = __webpack_require__(10);
 
-  for (var _i = 0; _i < vertices.length; ++_i) {
-    if (_i % 3 === 0) {
-      vertices[_i] = node_x[_i];
-    } else if (_i % 3 === 1) {
-      vertices[_i] = node_y[_i];
-    } else if (_i % 3 === 2) {
-      vertices[_i] = 0;
-    }
-  }
+var _circle2 = _interopRequireDefault(_circle);
 
-  var geometry = new THREE.BufferGeometry();
+var _clam = __webpack_require__(11);
 
-  geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+var _clam2 = _interopRequireDefault(_clam);
 
-  var material = new THREE.LineBasicMaterial({
-    color: 0x00ffff
-  });
+var _pearl = __webpack_require__(12);
 
-  var line = new THREE.Line(geometry, material);
+var _pearl2 = _interopRequireDefault(_pearl);
 
-  scene.add(line);
+var _polygon = __webpack_require__(13);
+
+var _polygon2 = _interopRequireDefault(_polygon);
+
+var _sacredCircles = __webpack_require__(14);
+
+var _sacredCircles2 = _interopRequireDefault(_sacredCircles);
+
+var _offsetStar = __webpack_require__(15);
+
+var _offsetStar2 = _interopRequireDefault(_offsetStar);
+
+var _collide0scope = __webpack_require__(16);
+
+var _collide0scope2 = _interopRequireDefault(_collide0scope);
+
+var _gyr0scope = __webpack_require__(17);
+
+var _gyr0scope2 = _interopRequireDefault(_gyr0scope);
+
+var _blanket = __webpack_require__(18);
+
+var _blanket2 = _interopRequireDefault(_blanket);
+
+var _concentricPolygons = __webpack_require__(19);
+
+var _concentricPolygons2 = _interopRequireDefault(_concentricPolygons);
+
+var _concentricPolygons3 = __webpack_require__(20);
+
+var _concentricPolygons4 = _interopRequireDefault(_concentricPolygons3);
+
+var _pinwheel = __webpack_require__(21);
+
+var _pinwheel2 = _interopRequireDefault(_pinwheel);
+
+var _bounceRipple = __webpack_require__(22);
+
+var _bounceRipple2 = _interopRequireDefault(_bounceRipple);
+
+var _sloshRipple = __webpack_require__(23);
+
+var _sloshRipple2 = _interopRequireDefault(_sloshRipple);
+
+var _wrigglingDonut = __webpack_require__(24);
+
+var _wrigglingDonut2 = _interopRequireDefault(_wrigglingDonut);
+
+var _apollo = __webpack_require__(25);
+
+var _apollo2 = _interopRequireDefault(_apollo);
+
+var _sineWave = __webpack_require__(26);
+
+var _sineWave2 = _interopRequireDefault(_sineWave);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ANIMATION_MAP = {
+
+	'triangle': _triangle2.default,
+	'rectangle': _rectangle2.default,
+	'cube': _cube2.default,
+	'circle': _circle2.default,
+	'clam': _clam2.default,
+	'pearl': _pearl2.default,
+	'polystarter': _polygon2.default,
+	'sacred circles': _sacredCircles2.default,
+	'star': _offsetStar2.default,
+	'collide': _collide0scope2.default,
+	'gyro': _gyr0scope2.default,
+	'blanket': _blanket2.default,
+	'concentric polygons': _concentricPolygons2.default,
+	'concentric polygons 2': _concentricPolygons4.default,
+	'pinwheel': _pinwheel2.default,
+	'bounce ripple': _bounceRipple2.default,
+	'slosh ripple': _sloshRipple2.default,
+	'wriggling donut': _wrigglingDonut2.default,
+	'apollo': _apollo2.default,
+	'sine wave': _sineWave2.default
+
+};
+
+function generateAnimation(scene, animation) {
+
+	if (ANIMATION_MAP[animation.name]) {
+		return new ANIMATION_MAP[animation.name](scene, animation);
+	}
 }
 
 /***/ }),
@@ -47320,280 +47127,1502 @@ function generateSineWave(scene, numPoints) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-exports.generateCollide0scope = generateCollide0scope;
-exports.generateGyr0scope = generateGyr0scope;
-exports.generateBlanket = generateBlanket;
-exports.generateConcentricPolygons = generateConcentricPolygons;
-exports.generateConcentricPolygons2 = generateConcentricPolygons2;
-exports.generatePinwheel = generatePinwheel;
-exports.generateBounceRipple = generateBounceRipple;
-exports.generateSloshRipple = generateSloshRipple;
-exports.generateWrigglingDonut = generateWrigglingDonut;
-exports.generateApollo = generateApollo;
-exports.updateCollide0scope = updateCollide0scope;
-exports.updateGyr0scope = updateGyr0scope;
-exports.updateConcentricPolygons = updateConcentricPolygons;
-exports.updateConcentricPolygons2 = updateConcentricPolygons2;
-exports.updatePinwheel = updatePinwheel;
-exports.updateBounceRipple = updateBounceRipple;
-exports.updateSloshRipple = updateSloshRipple;
-exports.updateWrigglingDonut = updateWrigglingDonut;
-exports.updateApollo = updateApollo;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _three = __webpack_require__(0);
 
 var THREE = _interopRequireWildcard(_three);
 
-var _utils = __webpack_require__(1);
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function generateCollide0scope(scene, numCircles) {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  for (var i = 0; i < numCircles; ++i) {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    var geometry = new THREE.CircleBufferGeometry(1 + i / (10 * numCircles), 10);
-    var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: true });
-    var mesh = new THREE.Mesh(geometry, material);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    scene.add(mesh);
-  }
-}
+var Triangle = function (_Animation) {
+	_inherits(Triangle, _Animation);
 
-function generateGyr0scope(scene, numCircles) {
+	function Triangle(scene, animation) {
+		_classCallCheck(this, Triangle);
 
-  for (var i = 0; i < numCircles; ++i) {
+		return _possibleConstructorReturn(this, (Triangle.__proto__ || Object.getPrototypeOf(Triangle)).call(this, scene, animation));
+	}
 
-    var geometry = new THREE.CircleBufferGeometry(1 + i / (10 * numCircles), 10);
-    var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: true });
-    var mesh = new THREE.Mesh(geometry, material);
+	_createClass(Triangle, [{
+		key: 'draw',
+		value: function draw() {
 
-    scene.add(mesh);
-  }
-}
+			var geometry = new THREE.BufferGeometry();
 
-function generateBlanket(scene, numPolygons, numFaces) {
+			var vertices = new Float32Array([-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0]);
 
-  for (var i = 2 * numPolygons; i >= 1; i--) {
+			var colors = new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]);
 
-    var geometry = new THREE.CircleBufferGeometry(10 / (2 * numPolygons - i + 1), numFaces);
-    var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: false });
-    var mesh = new THREE.Mesh(geometry, material);
+			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-    mesh.rotateZ(Math.PI * i / 4);
+			geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    scene.add(mesh);
-  }
-}
+			var material = new THREE.LineBasicMaterial({
+				vertexColors: THREE.VertexColors
+			});
 
-function generateConcentricPolygons(scene, numPolygons, numFaces) {
+			var mesh = new THREE.Mesh(geometry, material);
 
-  for (var i = numPolygons; i >= 1; i--) {
+			this.scene.add(mesh);
+		}
+	}]);
 
-    var geometry = new THREE.CircleBufferGeometry(10 / (numPolygons - i + 1), numFaces);
-    var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: false });
-    var mesh = new THREE.Mesh(geometry, material);
+	return Triangle;
+}(_animation2.default);
 
-    scene.add(mesh);
-  }
-}
-
-function generateConcentricPolygons2(scene, numPolygons, radius) {
-
-  var x = [0, 0];
-  var t = 0;
-  var col = 0xf00a00;
-
-  for (var i = 1; i <= numPolygons; ++i) {
-
-    var r = radius * i / numPolygons;
-    var poly = new _utils.polygon(x, r, i + 2, t, col);
-
-    scene.add(poly.line);
-  }
-}
-
-function generatePinwheel(scene, numPolygons, numFaces) {
-
-  for (var i = 2 * numPolygons; i >= 1; i--) {
-
-    var geometry = new THREE.CircleBufferGeometry(20 / (2 * numPolygons - i / 2 + 1), numFaces);
-    var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i + 1), wireframe: false });
-    var mesh = new THREE.Mesh(geometry, material);
-
-    scene.add(mesh);
-  }
-}
-
-function generateBounceRipple(scene, numPolygons, radius) {
-
-  var x = [0, 0];
-  var col = 0xf00a00;
-
-  for (var i = 1; i <= numPolygons; ++i) {
-
-    var r = radius * i / 10;
-    var poly = new _utils.polygon(x, r, 100, 0, col);
-
-    scene.add(poly.line);
-  }
-}
-
-function generateSloshRipple(scene, numPolygons, radius) {
-
-  var x = [0, 0];
-
-  for (var i = 1; i <= numPolygons; ++i) {
-
-    var r = radius * i / 10;
-    var poly = new _utils.polygon(x, r, 100, 0, (0, _utils.colorNodes)(i - 1));
-
-    scene.add(poly.line);
-  }
-}
-
-function generateWrigglingDonut(scene, numNodes, numPolygons, polyRadius, globalRadius) {
-
-  var x = [0, 0];
-
-  for (var i = 1; i < numNodes; ++i) {
-
-    for (var j = 0; j < numNodes; ++j) {
-
-      x[0] = globalRadius * (Math.cos((0, _utils.phi)(i, numNodes)) + Math.cos((0, _utils.phi)(j, numNodes)) * Math.sin((0, _utils.phi)(i, numPolygons)));
-      x[1] = globalRadius * (Math.sin((0, _utils.phi)(i, numNodes)) + Math.sin((0, _utils.phi)(j, numNodes)) * Math.cos((0, _utils.phi)(i, numPolygons)));
-
-      var poly = new _utils.polygon(x, polyRadius, numNodes, 0, (0, _utils.colorNodes)(1));
-      scene.add(poly.line);
-    }
-  }
-}
-
-function generateApollo(scene, numNodes, numPolygons, polyRadius, globalRadius) {
-
-  var x = [0, 0];
-
-  for (var i = 1; i < numNodes; ++i) {
-
-    for (var j = 0; j < numNodes; ++j) {
-
-      for (var k = 0; k < numPolygons; ++k) {
-
-        x[0] = globalRadius * (Math.cos((0, _utils.phi)(i, numNodes)) + Math.cos((0, _utils.phi)(j, numNodes))) * Math.sin((0, _utils.phi)(k, numPolygons));
-        x[1] = globalRadius * (Math.sin((0, _utils.phi)(i, numNodes)) + Math.sin((0, _utils.phi)(j, numNodes))) * Math.cos((0, _utils.phi)(k, numPolygons));
-
-        var poly = new _utils.polygon(x, polyRadius, numNodes, 0, (0, _utils.colorNodes)(1));
-        scene.add(poly.line);
-      }
-    }
-  }
-}
-
-function updateCollide0scope(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-
-    var r = 1 + i / 5;
-
-    if (i % 2 == 0) {
-
-      scene.children[i].position.z += (0.005 + i / 1000) * Math.cos(t);
-      scene.children[i].rotation.z -= 0.01 * Math.cos(t);
-    } else {
-
-      scene.children[i].position.z -= (0.005 + i / 1000) * Math.cos(t);
-      scene.children[i].rotation.z += 0.01 * Math.sin(t);
-    }
-  }
-}
-
-function updateGyr0scope(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-
-    var r = 1;
-
-    if (i % 2 == 0) {
-
-      scene.children[i].scale.set(1, r * Math.cos(t / 2), 2);
-      scene.children[i].rotation.z -= 0.01 * Math.cos(t);
-    } else {
-
-      scene.children[i].scale.set(1, r * Math.sin(t / 2), 1);
-      scene.children[i].rotation.z += 0.01 * Math.sin(t);
-    }
-  }
-}
-
-function updateConcentricPolygons(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-    scene.children[i].rotation.z = 2 * (scene.children.length - i) * Math.sin(t / 4);
-  }
-}
-
-function updateConcentricPolygons2(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-
-    if (i % 2 === 0) {
-      scene.children[i].rotation.z = Math.sin(i) * t / 2;
-    } else {
-      scene.children[i].rotation.z = Math.sin(-i) * t / 2;
-    }
-  }
-}
-
-function updatePinwheel(scene, numPolygons, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-    scene.children[i].rotation.z = 2 * t * (scene.children.length / 2 - i) * Math.PI * i / 160;
-  }
-}
-
-function updateBounceRipple(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-    scene.children[i].scale.set(Math.cos(t) * Math.sin((0, _utils.phi)(i, 100) + 2 * t), Math.cos(t) * Math.sin((0, _utils.phi)(i, 100) + 2 * t), 1);
-  }
-}
-
-function updateSloshRipple(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-    scene.children[i].scale.set(Math.cos((0, _utils.phi)(i, 100) + t / 100), Math.cos((0, _utils.phi)(i, 100) + t / 100), 1);
-  }
-}
-
-function updateWrigglingDonut(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-    scene.children[i].rotation.z -= 10 * t;
-  }
-}
-
-function updateApollo(scene, t) {
-
-  for (var i = 0; i < scene.children.length; ++i) {
-
-    if (i % 2 === 0) {
-      scene.children[i].rotation.z -= 1e-3;
-      //scene.children[i].rotation.z -= Math.sin(t/1000)/10;
-      //scene.children[i].scale.set(Math.cos(phi(i, 100) + t/10));
-      //scene.children[i].scale.set(Math.cos(phi(i, 100) + t/10), -Math.sin(phi(i, 100) + t/10), Math.cos(t));
-    } else {
-      scene.children[i].rotation.z += 1e-3;
-      //scene.children[i].rotation.z += Math.sin(t/1000)/5;
-      //scene.children[i].scale.set(-Math.cos(phi(i, 100) + t/10));
-      //scene.children[i].scale.set(-Math.sin(phi(i, 100) + t/10), Math.cos(phi(i, 100) + t/10), Math.sin(t));
-    }
-  }
-}
+exports.default = Triangle;
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Rectangle = function (_Animation) {
+	_inherits(Rectangle, _Animation);
+
+	function Rectangle(scene, animation) {
+		_classCallCheck(this, Rectangle);
+
+		return _possibleConstructorReturn(this, (Rectangle.__proto__ || Object.getPrototypeOf(Rectangle)).call(this, scene, animation));
+	}
+
+	_createClass(Rectangle, [{
+		key: 'draw',
+		value: function draw() {
+
+			var geometry = new THREE.BufferGeometry();
+
+			var vertices = new Float32Array([-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.5, 0.5, 0.0, -0.5, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, 0.5, 0.0]);
+
+			var colors = new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]);
+
+			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+			geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+			var material = new THREE.MeshBasicMaterial({
+				vertexColors: THREE.VertexColors,
+				wireframe: false
+			});
+
+			var mesh = new THREE.Mesh(geometry, material);
+
+			this.scene.add(mesh);
+		}
+	}]);
+
+	return Rectangle;
+}(_animation2.default);
+
+exports.default = Rectangle;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Cube = function (_Animation) {
+	_inherits(Cube, _Animation);
+
+	function Cube(scene, animation) {
+		_classCallCheck(this, Cube);
+
+		return _possibleConstructorReturn(this, (Cube.__proto__ || Object.getPrototypeOf(Cube)).call(this, scene, animation));
+	}
+
+	_createClass(Cube, [{
+		key: 'draw',
+		value: function draw() {
+
+			var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
+			var material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: false });
+			var mesh = new THREE.Mesh(geometry, material);
+
+			this.scene.add(mesh);
+		}
+	}]);
+
+	return Cube;
+}(_animation2.default);
+
+exports.default = Cube;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Circle = function (_Animation) {
+	_inherits(Circle, _Animation);
+
+	function Circle(scene, animation) {
+		_classCallCheck(this, Circle);
+
+		return _possibleConstructorReturn(this, (Circle.__proto__ || Object.getPrototypeOf(Circle)).call(this, scene, animation));
+	}
+
+	_createClass(Circle, [{
+		key: 'draw',
+		value: function draw(numSpokes, radius) {
+
+			var geometry = new THREE.CircleBufferGeometry(radius, numSpokes);
+			var material = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true });
+			var mesh = new THREE.Mesh(geometry, material);
+
+			this.scene.add(mesh);
+		}
+	}]);
+
+	return Circle;
+}(_animation2.default);
+
+exports.default = Circle;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Clam = function (_Animation) {
+	_inherits(Clam, _Animation);
+
+	function Clam(scene, animation) {
+		_classCallCheck(this, Clam);
+
+		return _possibleConstructorReturn(this, (Clam.__proto__ || Object.getPrototypeOf(Clam)).call(this, scene, animation));
+	}
+
+	_createClass(Clam, [{
+		key: 'draw',
+		value: function draw(numRidges, radius) {
+
+			var phi = [];
+
+			for (var i = 0; i <= numRidges; ++i) {
+				phi.push(2 * Math.PI * i / numRidges);
+			}
+
+			var vertices = new Float32Array(phi.length * 3);
+
+			for (var _i = 0; _i < vertices.length; ++_i) {
+
+				if (_i % 3 === 0) {
+					vertices[_i] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i]), 2)) * Math.cos(phi[_i]);
+				} else if (_i % 3 === 1) {
+					vertices[_i] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i]), 2)) * Math.sin(phi[_i]);
+				} else if (_i % 3 === 2) {
+					vertices[_i] = 0;
+				}
+			}
+
+			var geometry = new THREE.BufferGeometry();
+
+			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+			var material = new THREE.LineBasicMaterial({
+				color: 0x00ffff
+			});
+
+			var line = new THREE.Line(geometry, material);
+
+			this.scene.add(line);
+
+			for (var _i2 = 0; _i2 < numRidges; ++_i2) {
+
+				var endpoints = new Float32Array(6);
+
+				endpoints[0] = 0;
+				endpoints[1] = 0;
+				endpoints[2] = 0;
+				endpoints[3] = vertices[3 * _i2 + 0];
+				endpoints[4] = vertices[3 * _i2 + 1];
+				endpoints[5] = vertices[3 * _i2 + 2];
+
+				var _geometry = new THREE.BufferGeometry();
+
+				_geometry.addAttribute('position', new THREE.BufferAttribute(endpoints, 3));
+
+				var _material = new THREE.LineBasicMaterial({
+					color: 0x00ffff
+				});
+
+				var _line = new THREE.Line(_geometry, _material);
+
+				this.scene.add(_line);
+			}
+		}
+	}]);
+
+	return Clam;
+}(_animation2.default);
+
+exports.default = Clam;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Pearl = function (_Animation) {
+	_inherits(Pearl, _Animation);
+
+	function Pearl(scene, animation) {
+		_classCallCheck(this, Pearl);
+
+		return _possibleConstructorReturn(this, (Pearl.__proto__ || Object.getPrototypeOf(Pearl)).call(this, scene, animation));
+	}
+
+	_createClass(Pearl, [{
+		key: 'draw',
+		value: function draw(numRidges, radius) {
+
+			var phi = [];
+
+			for (var i = 0; i <= numRidges; ++i) {
+				phi.push(2 * Math.PI * i / numRidges);
+			}
+
+			var vertices = new Float32Array(phi.length * 3);
+
+			for (var _i = 0; _i < vertices.length; ++_i) {
+
+				if (_i % 3 === 0) {
+					vertices[_i] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i]), 2)) * Math.cos(phi[_i]);
+				} else if (_i % 3 === 1) {
+					vertices[_i] = radius * Math.sqrt(1 - Math.pow(Math.cos(phi[_i]), 2)) * Math.sin(phi[_i]);
+				} else if (_i % 3 === 2) {
+					vertices[_i] = 0;
+				}
+			}
+
+			var geometry = new THREE.BufferGeometry();
+
+			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+			var material = new THREE.LineBasicMaterial({
+				color: 0x00ffff
+			});
+
+			var line = new THREE.Line(geometry, material);
+
+			this.scene.add(line);
+
+			for (var _i2 = 0; _i2 < numRidges; ++_i2) {
+
+				var endpoints = new Float32Array(6);
+
+				endpoints[0] = 0;
+				endpoints[1] = 0;
+				endpoints[2] = 0;
+				endpoints[3] = vertices[3 * _i2 + 0];
+				endpoints[4] = vertices[3 * _i2 + 1];
+				endpoints[5] = vertices[3 * _i2 + 2];
+
+				var _geometry = new THREE.BufferGeometry();
+
+				_geometry.addAttribute('position', new THREE.BufferAttribute(endpoints, 3));
+
+				var _material = new THREE.LineBasicMaterial({
+					color: 0x00ffff
+				});
+
+				var _line = new THREE.Line(_geometry, _material);
+
+				this.scene.add(_line);
+			}
+
+			var pearlGeometry = new THREE.CircleBufferGeometry(radius / 10, 32);
+
+			var pearlMaterial = new THREE.MeshBasicMaterial({
+				color: 0xffffff
+			});
+
+			var pearl = new THREE.Mesh(pearlGeometry, pearlMaterial);
+
+			this.scene.add(pearl);
+		}
+	}]);
+
+	return Pearl;
+}(_animation2.default);
+
+exports.default = Pearl;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Polygon = function (_Animation) {
+	_inherits(Polygon, _Animation);
+
+	function Polygon(scene, animation) {
+		_classCallCheck(this, Polygon);
+
+		return _possibleConstructorReturn(this, (Polygon.__proto__ || Object.getPrototypeOf(Polygon)).call(this, scene, animation));
+	}
+
+	_createClass(Polygon, [{
+		key: 'draw',
+		value: function draw() {
+
+			var x = [0, 0];
+			var r = 0.5;
+			var n = 6;
+			var t = 0;
+			var col = 0xf00a00;
+
+			var poly = new _utils.polygon(x, r, n, t, col);
+
+			this.scene.add(poly.line);
+		}
+	}, {
+		key: 'update',
+		value: function update(t) {
+
+			for (var i = 0; i < this.scene.children.length; ++i) {
+				this.scene.children[i].rotation.z += 1;
+			}
+		}
+	}]);
+
+	return Polygon;
+}(_animation2.default);
+
+exports.default = Polygon;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SacredCircles = function (_Animation) {
+	_inherits(SacredCircles, _Animation);
+
+	function SacredCircles(scene, animation) {
+		_classCallCheck(this, SacredCircles);
+
+		return _possibleConstructorReturn(this, (SacredCircles.__proto__ || Object.getPrototypeOf(SacredCircles)).call(this, scene, animation));
+	}
+
+	_createClass(SacredCircles, [{
+		key: 'draw',
+		value: function draw(numLayers, numCircles, circleRadius, globalRadius, color) {
+
+			var center = [0, 0];
+
+			for (var i = 0; i < numCircles; ++i) {
+
+				for (var j = 0; j < numLayers; ++j) {
+
+					var x = center;
+
+					x[0] = globalRadius * (Math.cos((0, _utils.phi)(i, numCircles)) + Math.sin((0, _utils.phi)(j, numLayers)));
+					x[1] = globalRadius * (Math.sin((0, _utils.phi)(i, numCircles)) + Math.cos((0, _utils.phi)(j, numLayers)));
+
+					var poly = new _utils.polygon(x, circleRadius, 100, 0, color);
+
+					this.scene.add(poly.line);
+				}
+			}
+		}
+	}]);
+
+	return SacredCircles;
+}(_animation2.default);
+
+exports.default = SacredCircles;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var OffsetStar = function (_Animation) {
+	_inherits(OffsetStar, _Animation);
+
+	function OffsetStar(scene, animation) {
+		_classCallCheck(this, OffsetStar);
+
+		return _possibleConstructorReturn(this, (OffsetStar.__proto__ || Object.getPrototypeOf(OffsetStar)).call(this, scene, animation));
+	}
+
+	_createClass(OffsetStar, [{
+		key: 'draw',
+		value: function draw(numVertices, radius, offset, color) {
+
+			var x = [0, 0];
+			var star = new _utils.offsetStar(numVertices, x, radius, 0, offset, color);
+
+			this.scene.add(star.line);
+		}
+	}]);
+
+	return OffsetStar;
+}(_animation2.default);
+
+exports.default = OffsetStar;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Collide0scope = function (_Animation) {
+  _inherits(Collide0scope, _Animation);
+
+  function Collide0scope(scene, animation) {
+    _classCallCheck(this, Collide0scope);
+
+    return _possibleConstructorReturn(this, (Collide0scope.__proto__ || Object.getPrototypeOf(Collide0scope)).call(this, scene, animation));
+  }
+
+  _createClass(Collide0scope, [{
+    key: 'draw',
+    value: function draw(numCircles) {
+
+      for (var i = 0; i < numCircles; ++i) {
+
+        var geometry = new THREE.CircleBufferGeometry(1 + i / (10 * numCircles), 10);
+        var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: true });
+        var mesh = new THREE.Mesh(geometry, material);
+
+        this.scene.add(mesh);
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+
+        var r = 1 + i / 5;
+
+        if (i % 2 == 0) {
+
+          this.scene.children[i].position.z += (0.005 + i / 1000) * Math.cos(t);
+          this.scene.children[i].rotation.z -= 0.01 * Math.cos(t);
+        } else {
+
+          this.scene.children[i].position.z -= (0.005 + i / 1000) * Math.cos(t);
+          this.scene.children[i].rotation.z += 0.01 * Math.sin(t);
+        }
+      }
+    }
+  }]);
+
+  return Collide0scope;
+}(_animation2.default);
+
+exports.default = Collide0scope;
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Gyr0scope = function (_Animation) {
+  _inherits(Gyr0scope, _Animation);
+
+  function Gyr0scope(scene, animation) {
+    _classCallCheck(this, Gyr0scope);
+
+    return _possibleConstructorReturn(this, (Gyr0scope.__proto__ || Object.getPrototypeOf(Gyr0scope)).call(this, scene, animation));
+  }
+
+  _createClass(Gyr0scope, [{
+    key: 'draw',
+    value: function draw(numCircles) {
+
+      for (var i = 0; i < numCircles; ++i) {
+
+        var geometry = new THREE.CircleBufferGeometry(1 + i / (10 * numCircles), 10);
+        var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: true });
+        var mesh = new THREE.Mesh(geometry, material);
+
+        this.scene.add(mesh);
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+
+        var r = 1;
+
+        if (i % 2 == 0) {
+
+          this.scene.children[i].scale.set(1, r * Math.cos(t / 2), 2);
+          this.scene.children[i].rotation.z -= 0.01 * Math.cos(t);
+        } else {
+
+          this.scene.children[i].scale.set(1, r * Math.sin(t / 2), 1);
+          this.scene.children[i].rotation.z += 0.01 * Math.sin(t);
+        }
+      }
+    }
+  }]);
+
+  return Gyr0scope;
+}(_animation2.default);
+
+exports.default = Gyr0scope;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Blanket = function (_Animation) {
+  _inherits(Blanket, _Animation);
+
+  function Blanket(scene, animation) {
+    _classCallCheck(this, Blanket);
+
+    return _possibleConstructorReturn(this, (Blanket.__proto__ || Object.getPrototypeOf(Blanket)).call(this, scene, animation));
+  }
+
+  _createClass(Blanket, [{
+    key: 'draw',
+    value: function draw(numPolygons, numFaces) {
+
+      for (var i = 2 * numPolygons; i >= 1; i--) {
+
+        var geometry = new THREE.CircleBufferGeometry(10 / (2 * numPolygons - i + 1), numFaces);
+        var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: false });
+        var mesh = new THREE.Mesh(geometry, material);
+
+        mesh.rotateZ(Math.PI * i / 4);
+
+        this.scene.add(mesh);
+      }
+    }
+  }]);
+
+  return Blanket;
+}(_animation2.default);
+
+exports.default = Blanket;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ConcentricPolygons = function (_Animation) {
+  _inherits(ConcentricPolygons, _Animation);
+
+  function ConcentricPolygons(scene, animation) {
+    _classCallCheck(this, ConcentricPolygons);
+
+    return _possibleConstructorReturn(this, (ConcentricPolygons.__proto__ || Object.getPrototypeOf(ConcentricPolygons)).call(this, scene, animation));
+  }
+
+  _createClass(ConcentricPolygons, [{
+    key: 'draw',
+    value: function draw(numPolygons, numFaces) {
+
+      for (var i = numPolygons; i >= 1; i--) {
+
+        var geometry = new THREE.CircleBufferGeometry(10 / (numPolygons - i + 1), numFaces);
+        var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i), wireframe: false });
+        var mesh = new THREE.Mesh(geometry, material);
+
+        this.scene.add(mesh);
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+        this.scene.children[i].rotation.z = 2 * (this.scene.children.length - i) * Math.sin(t / 4);
+      }
+    }
+  }]);
+
+  return ConcentricPolygons;
+}(_animation2.default);
+
+exports.default = ConcentricPolygons;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ConcentricPolygons2 = function (_Animation) {
+  _inherits(ConcentricPolygons2, _Animation);
+
+  function ConcentricPolygons2(scene, animation) {
+    _classCallCheck(this, ConcentricPolygons2);
+
+    return _possibleConstructorReturn(this, (ConcentricPolygons2.__proto__ || Object.getPrototypeOf(ConcentricPolygons2)).call(this, scene, animation));
+  }
+
+  _createClass(ConcentricPolygons2, [{
+    key: 'draw',
+    value: function draw(numPolygons, radius) {
+
+      var x = [0, 0];
+      var t = 0;
+      var col = 0xf00a00;
+
+      for (var i = 1; i <= numPolygons; ++i) {
+
+        var r = radius * i / numPolygons;
+        var poly = new _utils.polygon(x, r, i + 2, t, col);
+
+        this.scene.add(poly.line);
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+
+        if (i % 2 === 0) {
+          this.scene.children[i].rotation.z = Math.sin(i) * t / 2;
+        } else {
+          this.scene.children[i].rotation.z = Math.sin(-i) * t / 2;
+        }
+      }
+    }
+  }]);
+
+  return ConcentricPolygons2;
+}(_animation2.default);
+
+exports.default = ConcentricPolygons2;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Pinwheel = function (_Animation) {
+  _inherits(Pinwheel, _Animation);
+
+  function Pinwheel(scene, animation) {
+    _classCallCheck(this, Pinwheel);
+
+    return _possibleConstructorReturn(this, (Pinwheel.__proto__ || Object.getPrototypeOf(Pinwheel)).call(this, scene, animation));
+  }
+
+  _createClass(Pinwheel, [{
+    key: 'draw',
+    value: function draw(numPolygons, numFaces) {
+
+      for (var i = 2 * numPolygons; i >= 1; i--) {
+
+        var geometry = new THREE.CircleBufferGeometry(20 / (2 * numPolygons - i / 2 + 1), numFaces);
+        var material = new THREE.MeshBasicMaterial({ color: (0, _utils.colorNodes)(i + 1), wireframe: false });
+        var mesh = new THREE.Mesh(geometry, material);
+
+        this.scene.add(mesh);
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+        this.scene.children[i].rotation.z = 2 * t * (this.scene.children.length / 2 - i) * Math.PI * i / 160;
+      }
+    }
+  }]);
+
+  return Pinwheel;
+}(_animation2.default);
+
+exports.default = Pinwheel;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BounceRipple = function (_Animation) {
+  _inherits(BounceRipple, _Animation);
+
+  function BounceRipple(scene, animation) {
+    _classCallCheck(this, BounceRipple);
+
+    return _possibleConstructorReturn(this, (BounceRipple.__proto__ || Object.getPrototypeOf(BounceRipple)).call(this, scene, animation));
+  }
+
+  _createClass(BounceRipple, [{
+    key: 'draw',
+    value: function draw(numPolygons, radius) {
+
+      var x = [0, 0];
+      var col = 0xf00a00;
+
+      for (var i = 1; i <= numPolygons; ++i) {
+
+        var r = radius * i / 10;
+        var poly = new _utils.polygon(x, r, 100, 0, col);
+
+        this.scene.add(poly.line);
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+        this.scene.children[i].scale.set(Math.cos(t) * Math.sin((0, _utils.phi)(i, 100) + 2 * t), Math.cos(t) * Math.sin((0, _utils.phi)(i, 100) + 2 * t), 1);
+      }
+    }
+  }]);
+
+  return BounceRipple;
+}(_animation2.default);
+
+exports.default = BounceRipple;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SloshRipple = function (_Animation) {
+  _inherits(SloshRipple, _Animation);
+
+  function SloshRipple(scene, animation) {
+    _classCallCheck(this, SloshRipple);
+
+    return _possibleConstructorReturn(this, (SloshRipple.__proto__ || Object.getPrototypeOf(SloshRipple)).call(this, scene, animation));
+  }
+
+  _createClass(SloshRipple, [{
+    key: 'draw',
+    value: function draw(numPolygons, radius) {
+
+      var x = [0, 0];
+
+      for (var i = 1; i <= numPolygons; ++i) {
+
+        var r = radius * i / 10;
+        var poly = new _utils.polygon(x, r, 100, 0, (0, _utils.colorNodes)(i - 1));
+
+        this.scene.add(poly.line);
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+        this.scene.children[i].scale.set(Math.cos((0, _utils.phi)(i, 100) + t / 100), Math.cos((0, _utils.phi)(i, 100) + t / 100), 1);
+      }
+    }
+  }]);
+
+  return SloshRipple;
+}(_animation2.default);
+
+exports.default = SloshRipple;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var WrigglingDonut = function (_Animation) {
+  _inherits(WrigglingDonut, _Animation);
+
+  function WrigglingDonut(scene, animation) {
+    _classCallCheck(this, WrigglingDonut);
+
+    return _possibleConstructorReturn(this, (WrigglingDonut.__proto__ || Object.getPrototypeOf(WrigglingDonut)).call(this, scene, animation));
+  }
+
+  _createClass(WrigglingDonut, [{
+    key: 'draw',
+    value: function draw(numNodes, numPolygons, polyRadius, globalRadius) {
+
+      var x = [0, 0];
+
+      for (var i = 1; i < numNodes; ++i) {
+
+        for (var j = 0; j < numNodes; ++j) {
+
+          x[0] = globalRadius * (Math.cos((0, _utils.phi)(i, numNodes)) + Math.cos((0, _utils.phi)(j, numNodes)) * Math.sin((0, _utils.phi)(i, numPolygons)));
+          x[1] = globalRadius * (Math.sin((0, _utils.phi)(i, numNodes)) + Math.sin((0, _utils.phi)(j, numNodes)) * Math.cos((0, _utils.phi)(i, numPolygons)));
+
+          var poly = new _utils.polygon(x, polyRadius, numNodes, 0, (0, _utils.colorNodes)(1));
+          this.scene.add(poly.line);
+        }
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+        this.scene.children[i].rotation.z -= 3 * Math.sin(t) + Math.cos(t);
+      }
+    }
+  }]);
+
+  return WrigglingDonut;
+}(_animation2.default);
+
+exports.default = WrigglingDonut;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+var _utils = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Apollo = function (_Animation) {
+  _inherits(Apollo, _Animation);
+
+  function Apollo(scene, animation) {
+    _classCallCheck(this, Apollo);
+
+    return _possibleConstructorReturn(this, (Apollo.__proto__ || Object.getPrototypeOf(Apollo)).call(this, scene, animation));
+  }
+
+  _createClass(Apollo, [{
+    key: 'draw',
+    value: function draw(numNodes, numPolygons, polyRadius, globalRadius) {
+
+      var x = [0, 0];
+
+      for (var i = 1; i < numNodes; ++i) {
+
+        for (var j = 0; j < numNodes; ++j) {
+
+          for (var k = 0; k < numPolygons; ++k) {
+
+            x[0] = globalRadius * (Math.cos((0, _utils.phi)(i, numNodes)) + Math.cos((0, _utils.phi)(j, numNodes))) * Math.sin((0, _utils.phi)(k, numPolygons));
+            x[1] = globalRadius * (Math.sin((0, _utils.phi)(i, numNodes)) + Math.sin((0, _utils.phi)(j, numNodes))) * Math.cos((0, _utils.phi)(k, numPolygons));
+
+            var poly = new _utils.polygon(x, polyRadius, numNodes, 0, (0, _utils.colorNodes)(1));
+            this.scene.add(poly.line);
+          }
+        }
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update(t) {
+
+      for (var i = 0; i < this.scene.children.length; ++i) {
+
+        if (i % 2 === 0) {
+          this.scene.children[i].rotation.z -= 1e-3;
+        } else {
+          this.scene.children[i].rotation.z += 1e-3;
+        }
+      }
+    }
+  }]);
+
+  return Apollo;
+}(_animation2.default);
+
+exports.default = Apollo;
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = __webpack_require__(0);
+
+var THREE = _interopRequireWildcard(_three);
+
+var _animation = __webpack_require__(1);
+
+var _animation2 = _interopRequireDefault(_animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SineWave = function (_Animation) {
+  _inherits(SineWave, _Animation);
+
+  function SineWave(scene, animation) {
+    _classCallCheck(this, SineWave);
+
+    return _possibleConstructorReturn(this, (SineWave.__proto__ || Object.getPrototypeOf(SineWave)).call(this, scene, animation));
+  }
+
+  _createClass(SineWave, [{
+    key: 'draw',
+    value: function draw(numPoints) {
+
+      var node_x = [];
+      var node_y = [];
+
+      for (var i = -numPoints; i <= numPoints; ++i) {
+        node_x.push(i / 1000);
+        node_y.push(Math.sin(10 * node_x[i + numPoints]) / 2);
+      }
+
+      var vertices = new Float32Array(node_x.length * 3);
+
+      for (var _i = 0; _i < vertices.length; ++_i) {
+        if (_i % 3 === 0) {
+          vertices[_i] = node_x[_i];
+        } else if (_i % 3 === 1) {
+          vertices[_i] = node_y[_i];
+        } else if (_i % 3 === 2) {
+          vertices[_i] = 0;
+        }
+      }
+
+      var geometry = new THREE.BufferGeometry();
+
+      geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+      var material = new THREE.LineBasicMaterial({
+        color: 0x00ffff
+      });
+
+      var line = new THREE.Line(geometry, material);
+
+      this.scene.add(line);
+    }
+  }]);
+
+  return SineWave;
+}(_animation2.default);
+
+exports.default = SineWave;
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports) {
 
 module.exports = function( THREE ) {
@@ -48619,11 +49648,11 @@ module.exports = function( THREE ) {
 
 
 /***/ }),
-/* 9 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(10);
+var content = __webpack_require__(29);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -48637,13 +49666,13 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(2)(content, options);
+var update = __webpack_require__(3)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../node_modules/style-loader/index.js!../../node_modules/css-loader/index.js!./opengl_webgl_conversion.css", function() {
-		var newContent = require("!!../../node_modules/style-loader/index.js!../../node_modules/css-loader/index.js!./opengl_webgl_conversion.css");
+	module.hot.accept("!!../../node_modules/style-loader/index.js!../../node_modules/css-loader/index.js!./index.css", function() {
+		var newContent = require("!!../../node_modules/style-loader/index.js!../../node_modules/css-loader/index.js!./index.css");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -48669,11 +49698,11 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(11);
+var content = __webpack_require__(30);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -48687,13 +49716,13 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(2)(content, options);
+var update = __webpack_require__(3)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
 if(false) {
-	module.hot.accept("!!../../node_modules/css-loader/index.js!./opengl_webgl_conversion.css", function() {
-		var newContent = require("!!../../node_modules/css-loader/index.js!./opengl_webgl_conversion.css");
+	module.hot.accept("!!../../node_modules/css-loader/index.js!./index.css", function() {
+		var newContent = require("!!../../node_modules/css-loader/index.js!./index.css");
 
 		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 
@@ -48719,10 +49748,10 @@ if(false) {
 }
 
 /***/ }),
-/* 11 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(12)(false);
+exports = module.exports = __webpack_require__(31)(false);
 // imports
 
 
@@ -48733,7 +49762,7 @@ exports.push([module.i, "body { \n  margin: 0; \n}\n\n/* Navigation Pane */\n\n#
 
 
 /***/ }),
-/* 12 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /*
@@ -48815,7 +49844,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 13 */
+/* 32 */
 /***/ (function(module, exports) {
 
 
@@ -48911,4 +49940,4 @@ module.exports = function (css) {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=app-b2ea9c16c167d1261894.js.map
+//# sourceMappingURL=app-44f52768edcfa21dcfef.js.map

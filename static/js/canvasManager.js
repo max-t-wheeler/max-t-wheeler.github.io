@@ -1,53 +1,8 @@
 import * as THREE from 'three';
 
-import { colorNodes } from './utils'
+import { colorNodes } from './utils' 
 
-import {
-
-  generateTriangle,
-  generateRectangle,
-  generateCube,
-  generateCircle,
-  generateClam,
-  generatePearl,
-  generatePolygon,
-  generateSacredCircles,
-  generateOffsetStar,
-  updatePolygon
-
-} from './humble_beginnings/shapes'
-
-import {
-
-  renderSineWave,
-  generateSineWave,
-  updateSineWave
-
-} from './humble_beginnings/physics'
-
-import {
-
-  generateCollide0scope,
-  generateGyr0scope,
-  generateBlanket,
-  generateConcentricPolygons,
-  generateConcentricPolygons2,
-  generatePinwheel,
-  generateBounceRipple,
-  generateSloshRipple,
-  generateWrigglingDonut,
-  generateApollo,
-  updateCollide0scope,
-  updateGyr0scope,
-  updateConcentricPolygons,
-  updateConcentricPolygons2,
-  updatePinwheel,
-  updateBounceRipple,
-  updateSloshRipple,
-  updateWrigglingDonut,
-  updateApollo
-
-} from './humble_beginnings/art'
+import { generateAnimation } from './animations/index'
 
 let OrbitControls = require('three-orbit-controls')(THREE)
 
@@ -70,15 +25,15 @@ export default class CanvasManager {
 
     // initialize animation
 
-    this.animation = animation;
+    this.scene = new THREE.Scene();
+
+    this.animation = generateAnimation(this.scene, animation);
 
     if (this.animation.controllable) {
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     }
 
     this.dt = 0;
-
-    this.scene = new THREE.Scene();
 
     this.draw();
 
@@ -129,64 +84,64 @@ export default class CanvasManager {
     switch(this.animation.name) {
 
       case "triangle":
-        generateTriangle(this.scene);
+        this.animation.draw();
         break;
       case "rectangle":
-        generateRectangle(this.scene);
+        this.animation.draw();
         break;
       case "cube":
-        generateCube(this.scene);
+        this.animation.draw();
         break;
       case "circle":
-        generateCircle(this.scene, 1, 5);
+        this.animation.draw(5, 1);
         break;
       case "clam":
-        generateClam(this.scene, 200, 1);
+        this.animation.draw(200, 1);
         break;
       case "pearl":
-        generatePearl(this.scene, 200, 1);
+        this.animation.draw(200, 1);
         break;
       case "polystarter":
-        generatePolygon(this.scene);
+        this.animation.draw();
         break;
       case "sacred circles":
-        generateSacredCircles(this.scene, 16, 5, 1, 1, colorNodes(0));
+        this.animation.draw(16, 5, 1, 1, colorNodes(0));
         break;
       case "star":
-        generateOffsetStar(this.scene, 10, 1, 2, colorNodes(0));
+        this.animation.draw(10, 1, 2, colorNodes(0));
         break;
       case "collide":
-        generateCollide0scope(this.scene, 20);
+        this.animation.draw(20);
         break;
       case "gyro":
-        generateGyr0scope(this.scene, 20);
+        this.animation.draw(20);
         break;
       case "sine wave":
-        generateSineWave(this.scene, 1500);
+        this.animation.draw(1500);
         break;
       case "concentric polygons":
-        generateConcentricPolygons(this.scene, 10, 5);
+        this.animation.draw(10, 5);
         break;
       case "concentric polygons 2":
-        generateConcentricPolygons2(this.scene, 20, 5);
+        this.animation.draw(20, 5);
         break;
       case "pinwheel":
-        generatePinwheel(this.scene, 10, 4);
+        this.animation.draw(10, 4);
         break;
       case "blanket":
-        generateBlanket(this.scene, 10, 4);
+        this.animation.draw(10, 4);
         break;
       case "bounce ripple":
-        generateBounceRipple(this.scene, 10, 3);
+        this.animation.draw(10, 3);
         break;
       case "slosh ripple":
-        generateSloshRipple(this.scene, 200, 3);
+        this.animation.draw(200, 3);
         break;
       case "wriggling donut":
-        generateWrigglingDonut(this.scene, 40, 10, 1, 0.2);
+        this.animation.draw(40, 10, 1, 0.2);
         break;
       case "apollo":
-        generateApollo(this.scene, 8, 10, 1, 2);
+        this.animation.draw(8, 10, 1, 2);
         break;
       default:
         alert("Please enter a valid animation");
@@ -211,49 +166,8 @@ export default class CanvasManager {
         this.dt -= 2 * Math.PI * 1e6;
       }
 
-      this.update();
+      this.animation.update(this.dt);
       
-    }
-
-  }
-
-  update() {
-
-    switch(this.animation.name) {
-
-      case "collide":
-        updateCollide0scope(this.scene, this.dt);
-        break;
-      case "gyro":
-        updateGyr0scope(this.scene, this.dt);
-        break;
-      case "concentric polygons":
-        updateConcentricPolygons(this.scene, this.dt);
-        break;
-      case "concentric polygons 2":
-        updateConcentricPolygons2(this.scene, this.dt);
-        break;
-      case "pinwheel":
-        updatePinwheel(this.scene, 10, this.dt);
-        break;
-      case "polystarter":
-        updatePolygon(this.scene, 1);
-        break;
-      case "bounce ripple":
-        updateBounceRipple(this.scene, this.dt);
-        break;
-      case "slosh ripple":
-        updateSloshRipple(this.scene, this.dt);
-        break;
-      case "wriggling donut":
-        updateWrigglingDonut(this.scene, this.dt);
-        break;
-      case "apollo":
-        updateApollo(this.scene, this.dt);
-        break;
-      default:
-        break;
-
     }
 
   }
